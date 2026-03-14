@@ -160,27 +160,27 @@ export default async function InsurancePage({ params }: Props) {
         ]}
       />
 
-      <h1 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+      <h1 className="text-3xl font-extrabold text-zinc-900 tracking-tight text-balance sm:text-4xl">
         {info.name}
-        <span className="block text-lg font-normal text-gray-500 mt-1">
+        <span className="block text-lg font-normal text-zinc-500 mt-1">
           Baremo de precios dentales 2026
         </span>
       </h1>
-      <p className="mt-3 max-w-3xl text-gray-600">{info.description}</p>
+      <p className="mt-3 max-w-3xl text-zinc-500 text-pretty">{info.description}</p>
 
       {treatmentList.length > 0 ? (
         <>
           {/* Summary */}
-          <div className="mt-8 rounded-xl border border-primary-100 bg-primary-50 p-5">
+          <div className="mt-8 rounded-2xl border border-primary-100 bg-primary-50 p-5 shadow-soft">
             <div className="flex items-start gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-600 text-white text-sm font-bold">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-600 text-white text-sm font-bold tabular-nums">
                 {treatmentList.length}
               </div>
               <div>
-                <p className="font-semibold text-gray-900">
+                <p className="font-semibold text-zinc-900 text-pretty">
                   {treatmentList.length} tratamientos con precios publicados
                 </p>
-                <p className="mt-0.5 text-sm text-gray-600">
+                <p className="mt-0.5 text-sm text-zinc-500 text-pretty">
                   Precios de baremo diferenciados por Zona A y Zona B cuando disponibles
                 </p>
               </div>
@@ -191,8 +191,8 @@ export default async function InsurancePage({ params }: Props) {
           <div className="mt-8 overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b-2 border-gray-200">
-                  <th className="py-3 pr-4 text-left font-bold text-gray-900">
+                <tr className="border-b-2 border-zinc-200">
+                  <th className="py-3 pr-4 text-left font-bold text-zinc-900">
                     Tratamiento
                   </th>
                   <th className="px-4 py-3 text-right font-bold text-accent-700 whitespace-nowrap">
@@ -201,32 +201,32 @@ export default async function InsurancePage({ params }: Props) {
                       Zona A
                     </span>
                   </th>
-                  <th className="px-4 py-3 text-right font-bold text-gray-700 whitespace-nowrap">
+                  <th className="px-4 py-3 text-right font-bold text-zinc-900 whitespace-nowrap">
                     <span className="inline-flex items-center gap-1">
-                      <span className="h-2 w-2 rounded-full bg-gray-500" />
+                      <span className="h-2 w-2 rounded-full bg-zinc-400" />
                       Zona B
                     </span>
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-zinc-100">
                 {treatmentList.map((t) => (
                   <tr
                     key={t.slug}
-                    className="hover:bg-gray-50 transition-colors"
+                    className="hover:bg-zinc-50 transition-colors"
                   >
                     <td className="py-3 pr-4">
                       <Link
                         href={`/tratamientos/${t.slug}`}
-                        className="font-medium text-gray-900 hover:text-primary-600"
+                        className="press-scale font-medium text-zinc-900 hover:text-primary-600"
                       >
                         {t.name}
                       </Link>
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-accent-600 whitespace-nowrap">
+                    <td className="px-4 py-3 text-right font-semibold text-accent-600 whitespace-nowrap tabular-nums">
                       {t.zoneA ? formatInsPrice(t.zoneA) : "—"}
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-gray-700 whitespace-nowrap">
+                    <td className="px-4 py-3 text-right font-semibold text-zinc-900 whitespace-nowrap tabular-nums">
                       {t.zoneB ? formatInsPrice(t.zoneB) : "—"}
                     </td>
                   </tr>
@@ -236,11 +236,11 @@ export default async function InsurancePage({ params }: Props) {
           </div>
         </>
       ) : (
-        <Card className="mt-8 text-center">
-          <p className="text-gray-600">
+        <Card className="mt-8 text-center rounded-2xl shadow-soft">
+          <p className="text-zinc-500 text-pretty">
             Todavía no hemos procesado los datos de {info.name}.
           </p>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-zinc-400 text-pretty">
             Estamos trabajando en importar los baremos de todas las aseguradoras.
           </p>
         </Card>
@@ -248,7 +248,7 @@ export default async function InsurancePage({ params }: Props) {
 
       {/* Other insurances */}
       <section className="mt-12">
-        <h2 className="text-xl font-bold text-gray-900">
+        <h2 className="text-xl font-bold text-zinc-900 text-balance">
           Otras aseguradoras dentales
         </h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -256,7 +256,7 @@ export default async function InsurancePage({ params }: Props) {
             <Link
               key={slug}
               href={`/seguros-dentales/${slug}`}
-              className="rounded-xl border border-gray-200 bg-white p-4 text-sm font-medium text-gray-700 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 transition-all"
+              className="press-scale rounded-2xl border border-zinc-200/60 bg-white p-4 text-sm font-medium text-zinc-900 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 transition-all shadow-soft"
             >
               {ins.name}
             </Link>
@@ -265,7 +265,7 @@ export default async function InsurancePage({ params }: Props) {
         <div className="mt-4 text-center">
           <Link
             href="/seguros-dentales"
-            className="text-sm font-semibold text-primary-600 hover:text-primary-800"
+            className="press-scale text-sm font-semibold text-primary-600 hover:text-primary-800"
           >
             Ver todas las aseguradoras →
           </Link>
@@ -273,7 +273,7 @@ export default async function InsurancePage({ params }: Props) {
       </section>
 
       {/* Disclaimer */}
-      <p className="mt-10 text-xs text-gray-400 leading-relaxed">
+      <p className="mt-10 text-xs text-zinc-400 leading-relaxed text-pretty">
         Los precios mostrados corresponden a los baremos publicados por{" "}
         {info.name}. Son precios máximos que la aseguradora paga a las clínicas
         de su red. El precio final puede variar según el plan contratado.
