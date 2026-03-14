@@ -19,6 +19,7 @@ import {
 import { generateTreatmentMetadata } from "@/lib/seo/metadata";
 import { formatPrice } from "@/lib/utils/format";
 import { TREATMENT_CATEGORY_LABELS, type TreatmentCategory } from "@/types";
+import { TREATMENT_CONTENT } from "@/lib/data/treatment-content";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -209,6 +210,89 @@ export default async function TreatmentPage({ params }: Props) {
           />
         </div>
       )}
+
+      {/* Rich treatment content */}
+      {(() => {
+        const content = TREATMENT_CONTENT[treatment.slug];
+        if (!content) return null;
+        return (
+          <>
+            {/* Long description */}
+            <section className="mt-10">
+              <h2 className="text-xl font-bold text-zinc-900 text-balance">
+                ¿Qué es {treatment.name.toLowerCase()}?
+              </h2>
+              <div className="mt-3 text-zinc-600 leading-relaxed text-pretty space-y-3">
+                {content.longDescription.split("\n\n").map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
+            </section>
+
+            {/* What's included / excluded */}
+            <div className="mt-10 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl border border-green-200/60 bg-green-50/50 p-5">
+                <h3 className="font-semibold text-zinc-900">Qué incluye el precio</h3>
+                <ul className="mt-3 space-y-2">
+                  {content.includes.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-zinc-600">
+                      <svg className="mt-0.5 h-4 w-4 shrink-0 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-pretty">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-2xl border border-red-200/60 bg-red-50/50 p-5">
+                <h3 className="font-semibold text-zinc-900">Qué NO suele incluir</h3>
+                <ul className="mt-3 space-y-2">
+                  {content.excludes.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-zinc-600">
+                      <svg className="mt-0.5 h-4 w-4 shrink-0 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                      </svg>
+                      <span className="text-pretty">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Duration and recovery */}
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-2xl border border-zinc-200/60 bg-white p-4 shadow-soft">
+                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Duración</p>
+                <p className="mt-1 text-sm font-medium text-zinc-900">{content.duration}</p>
+              </div>
+              <div className="rounded-2xl border border-zinc-200/60 bg-white p-4 shadow-soft">
+                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Recuperación</p>
+                <p className="mt-1 text-sm font-medium text-zinc-900">{content.recovery}</p>
+              </div>
+            </div>
+
+            {/* Factors affecting price */}
+            <section className="mt-10">
+              <h2 className="text-xl font-bold text-zinc-900 text-balance">
+                Factores que afectan al precio
+              </h2>
+              <p className="mt-2 text-sm text-zinc-400 text-pretty">
+                El precio final de {treatment.name.toLowerCase()} puede variar según estos factores
+              </p>
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                {content.factorsAffectingPrice.map((factor, i) => (
+                  <div key={i} className="flex items-center gap-3 rounded-xl border border-zinc-200/60 bg-white px-4 py-3 shadow-soft">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-xs font-bold text-zinc-400">
+                      {i + 1}
+                    </span>
+                    <span className="text-sm text-zinc-700 text-pretty">{factor}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
+        );
+      })()}
 
       {/* Insurance comparison */}
       {insuranceRange && nonInsuranceRange && (

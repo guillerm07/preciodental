@@ -47,15 +47,15 @@ export default async function BlogPostPage({ params }: Props) {
       />
 
       <article>
-        <h1 className="text-3xl font-bold text-gray-900">{article.title}</h1>
-        <div className="mt-3 flex items-center gap-3 text-sm text-gray-500">
+        <h1 className="text-3xl font-bold tracking-tight text-zinc-900 text-balance">{article.title}</h1>
+        <div className="mt-3 flex items-center gap-3 text-sm text-zinc-400">
           {article.publishedAt && <span>{formatDate(article.publishedAt)}</span>}
           <span>{article.readingTime} min de lectura</span>
-          <span>{article.wordCount} palabras</span>
+          <span className="tabular-nums">{article.wordCount} palabras</span>
         </div>
 
         <div
-          className="prose prose-gray mt-8 max-w-none"
+          className="prose prose-zinc mt-8 max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary-600 prose-a:no-underline hover:prose-a:underline"
           dangerouslySetInnerHTML={{ __html: contentHtml }}
         />
       </article>

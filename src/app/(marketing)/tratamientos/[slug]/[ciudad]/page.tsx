@@ -17,6 +17,7 @@ import {
 } from "@/lib/data/queries";
 import { generateTreatmentCityMetadata } from "@/lib/seo/metadata";
 import { formatPrice, formatPercent } from "@/lib/utils/format";
+import { TREATMENT_CONTENT } from "@/lib/data/treatment-content";
 
 interface Props {
   params: Promise<{ slug: string; ciudad: string }>;
@@ -286,6 +287,40 @@ export default async function TreatmentCityPage({ params }: Props) {
           </Card>
         </section>
       )}
+
+      {/* Treatment info for SEO */}
+      {(() => {
+        const content = TREATMENT_CONTENT[treatment.slug];
+        if (!content) return null;
+        return (
+          <section className="mt-10">
+            <h2 className="text-xl font-bold text-zinc-900 text-balance">
+              Sobre {treatment.name.toLowerCase()} en {city.name}
+            </h2>
+            <p className="mt-3 text-zinc-600 leading-relaxed text-pretty">
+              {content.longDescription.split("\n\n")[0]}
+            </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-2xl border border-zinc-200/60 bg-white p-4 shadow-soft">
+                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Duración</p>
+                <p className="mt-1 text-sm font-medium text-zinc-900">{content.duration}</p>
+              </div>
+              <div className="rounded-2xl border border-zinc-200/60 bg-white p-4 shadow-soft">
+                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Recuperación</p>
+                <p className="mt-1 text-sm font-medium text-zinc-900">{content.recovery}</p>
+              </div>
+            </div>
+            <div className="mt-4 text-center">
+              <Link
+                href={`/tratamientos/${treatment.slug}`}
+                className="text-sm font-semibold text-primary-600 hover:text-primary-800"
+              >
+                Ver información completa de {treatment.name.toLowerCase()} →
+              </Link>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* Other cities */}
       <section className="mt-10">
