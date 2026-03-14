@@ -23,9 +23,7 @@ const INSURANCE_MAP: Record<string, { name: string; sourcePattern: string }> = {
   "mapfre-dental": { name: "Mapfre Dental", sourcePattern: "Mapfre%" },
 };
 
-export async function generateStaticParams() {
-  return Object.keys(INSURANCE_MAP).map((aseguradora) => ({ aseguradora }));
-}
+export const dynamicParams = true;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { aseguradora } = await params;

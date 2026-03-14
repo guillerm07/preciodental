@@ -12,10 +12,7 @@ interface Props {
   params: Promise<{ ciudad: string }>;
 }
 
-export async function generateStaticParams() {
-  const cities = await getAllCities();
-  return cities.map((c) => ({ ciudad: c.slug }));
-}
+export const dynamicParams = true;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { ciudad } = await params;

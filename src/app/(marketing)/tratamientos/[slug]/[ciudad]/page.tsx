@@ -22,15 +22,7 @@ interface Props {
   params: Promise<{ slug: string; ciudad: string }>;
 }
 
-export async function generateStaticParams() {
-  const [treatments, cities] = await Promise.all([
-    getAllTreatments(),
-    getAllCities(),
-  ]);
-  return treatments.flatMap((t) =>
-    cities.map((c) => ({ slug: t.slug, ciudad: c.slug }))
-  );
-}
+export const dynamicParams = true;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, ciudad } = await params;

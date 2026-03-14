@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { TreatmentSearch } from "@/components/TreatmentSearch";
 import { PriceCard } from "@/components/PriceCard";
