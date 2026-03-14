@@ -1,0 +1,44 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: postgresql://preciodental:${DB_PASSWORD}@db:5432/preciodental
+        NEXT_PUBLIC_SITE_URL: https://preciodental.net
+        ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    container_name: preciodental-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      DATABASE_URL: postgresql://preciodental:${DB_PASSWORD}@db:5432/preciodental
+      NEXT_PUBLIC_SITE_URL: https://preciodental.net
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      NODE_ENV: production
+    volumes:
+      - app_images:/app/public/images
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    container_name: preciodental-db-prod
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: preciodental
+      POSTGRES_USER: preciodental
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U preciodental"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata_prod:
+  app_images:
