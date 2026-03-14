@@ -26,38 +26,53 @@ export function PriceCard({
 
   return (
     <Link href={href} className={`block group ${className}`}>
-      <div className="rounded-2xl border border-zinc-200/60 bg-white p-5 shadow-soft transition-all duration-200 hover:shadow-elevated hover:border-zinc-300/60 press-scale">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="font-semibold text-zinc-900 group-hover:text-primary-700 transition-colors leading-snug">
-            {treatmentName}
-          </h3>
-          <span className="shrink-0 text-xl font-bold text-zinc-900 tabular-nums">
-            {formatPrice(priceRange.avg)}
-          </span>
-        </div>
-
-        {/* Mini range bar */}
-        <div className="mt-4 relative">
-          <div
-            className="h-1.5 w-full rounded-full overflow-hidden"
-            style={{
-              background: "linear-gradient(to right, #22c55e, #facc15, #ef4444)",
-            }}
-          />
-          <div
-            className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{ left: `${Math.min(Math.max(avgPos, 6), 94)}%` }}
-          >
-            <div className="w-2.5 h-2.5 rounded-full bg-zinc-900 border-2 border-white shadow-sm" />
+      <div className="relative overflow-hidden rounded-2xl glass p-6 transition-all duration-300 hover:shadow-elevated hover:border-primary-200/60 hover:-translate-y-1 press-scale">
+        
+        {/* Subtle background glow effect on hover */}
+        <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-primary-100 opacity-0 group-hover:opacity-40 blur-2xl transition-opacity duration-300" />
+        
+        <div className="relative z-10">
+          <div className="flex items-start justify-between gap-3">
+            <h3 className="font-semibold text-accent-900 group-hover:text-primary-700 transition-colors leading-snug">
+              {treatmentName}
+            </h3>
+            <span className="shrink-0 text-xl font-bold text-accent-900 tabular-nums">
+              {formatPrice(priceRange.avg)}
+            </span>
           </div>
-        </div>
 
-        <div className="mt-2.5 flex items-center justify-between text-xs">
-          <span className="text-primary-600 font-medium tabular-nums">{formatPrice(priceRange.min)}</span>
-          <span className="text-zinc-400">
-            {priceRange.count} fuente{priceRange.count > 1 ? "s" : ""}
-          </span>
-          <span className="text-zinc-500 tabular-nums">{formatPrice(priceRange.max)}</span>
+          <p className="mt-1 text-xs text-accent-400">Precio medio</p>
+
+          {/* Mini range bar */}
+          <div className="mt-5 relative">
+            <div
+              className="h-1.5 w-full rounded-full overflow-hidden shadow-inner bg-accent-100"
+            >
+              <div 
+                className="h-full bg-gradient-to-r from-primary-400 via-primary-300 to-amber-400 transform origin-left transition-transform duration-700 delay-100 ease-out scale-x-0 group-hover:scale-x-100"
+                style={{ width: "100%" }}
+              />
+              <div 
+                className="h-full bg-gradient-to-r from-primary-400 via-primary-300 to-amber-400 absolute top-0 left-0"
+                style={{ width: "100%", opacity: 0.5 }}
+              />
+            </div>
+            
+            <div
+              className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ease-out z-10"
+              style={{ left: `${Math.min(Math.max(avgPos, 6), 94)}%` }}
+            >
+              <div className="w-3 h-3 rounded-full bg-accent-950 border-[2.5px] border-white shadow-sm ring-2 ring-transparent group-hover:ring-primary-200/50 transition-all" />
+            </div>
+          </div>
+
+          <div className="mt-3 flex items-center justify-between text-xs font-medium">
+            <span className="text-primary-600 tabular-nums bg-primary-50 px-2 py-0.5 rounded-md">{formatPrice(priceRange.min)}</span>
+            <span className="text-accent-400 font-normal">
+              {priceRange.count} fuente{priceRange.count > 1 ? "s" : ""}
+            </span>
+            <span className="text-accent-500 tabular-nums bg-accent-50 px-2 py-0.5 rounded-md">{formatPrice(priceRange.max)}</span>
+          </div>
         </div>
       </div>
     </Link>

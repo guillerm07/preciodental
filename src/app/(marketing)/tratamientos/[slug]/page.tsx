@@ -104,7 +104,6 @@ export default async function TreatmentPage({ params }: Props) {
     .filter((t) => t.category === treatment.category && t.slug !== treatment.slug)
     .slice(0, 4);
 
-  // Top cities for linking
   const topCities = cities.slice(0, 12);
 
   const faqItems = [
@@ -148,7 +147,7 @@ export default async function TreatmentPage({ params }: Props) {
     : null;
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="bg-accent-50/50 min-h-screen">
       {jsonLd && (
         <script
           type="application/ld+json"
@@ -156,288 +155,334 @@ export default async function TreatmentPage({ params }: Props) {
         />
       )}
 
-      <Breadcrumbs
-        items={[
-          { label: "Inicio", href: "/" },
-          { label: "Tratamientos", href: "/tratamientos" },
-          { label: treatment.name, href: `/tratamientos/${treatment.slug}` },
-        ]}
-      />
+      {/* ── Immersive Header ── */}
+      <section className="relative overflow-hidden bg-white border-b border-accent-200">
+        <div className="absolute top-0 right-0 p-32 opacity-30 blur-3xl rounded-full bg-gradient-to-br from-primary-200 to-teal-100 mix-blend-multiply pointer-events-none" />
+        <div className="absolute bottom-0 left-0 p-32 opacity-20 blur-3xl rounded-full bg-gradient-to-tr from-accent-200 to-primary-100 mix-blend-multiply pointer-events-none" />
 
-      {/* Hero section */}
-      <div className="mt-2 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-        <div className="lg:max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary-600">
-            {TREATMENT_CATEGORY_LABELS[treatment.category as TreatmentCategory]}
-          </p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight text-zinc-900 text-balance sm:text-4xl">
-            {treatment.name}
-            <span className="text-zinc-400 text-2xl font-normal ml-2">
-              — Precio en España 2026
-            </span>
-          </h1>
-          {treatment.description && (
-            <p className="mt-3 text-lg text-zinc-500 text-pretty leading-relaxed">
-              {treatment.description}
-            </p>
-          )}
-        </div>
-
-        {/* Quick price answer */}
-        {priceRange && (
-          <div className="shrink-0 rounded-2xl border-2 border-primary-200 bg-primary-50 p-6 text-center shadow-glow-primary lg:min-w-[260px]">
-            <p className="text-sm font-medium text-primary-700">Precio medio nacional</p>
-            <p className="mt-1 text-4xl font-extrabold text-primary-600 tabular-nums">
-              {formatPrice(priceRange.avg)}
-            </p>
-            <p className="mt-1 text-sm text-primary-500 tabular-nums">
-              {formatPrice(priceRange.min)} — {formatPrice(priceRange.max)}
-            </p>
-            <p className="mt-2 text-xs text-primary-400 tabular-nums">
-              Basado en {priceRange.count} fuentes
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Visual price range */}
-      {priceRange && (
-        <div className="mt-8">
-          <PriceRangeBar
-            min={priceRange.min}
-            max={priceRange.max}
-            avg={priceRange.avg}
-            size="lg"
+        <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 mt-16 sm:mt-24">
+          <Breadcrumbs
+            items={[
+              { label: "Inicio", href: "/" },
+              { label: "Tratamientos", href: "/tratamientos" },
+              { label: treatment.name, href: `/tratamientos/${treatment.slug}` },
+            ]}
           />
-        </div>
-      )}
 
-      {/* Rich treatment content */}
-      {(() => {
-        const content = TREATMENT_CONTENT[treatment.slug];
-        if (!content) return null;
-        return (
-          <>
-            {/* Long description */}
-            <section className="mt-10">
-              <h2 className="text-xl font-bold text-zinc-900 text-balance">
-                ¿Qué es {treatment.name.toLowerCase()}?
-              </h2>
-              <div className="mt-3 text-zinc-600 leading-relaxed text-pretty space-y-3">
-                {content.longDescription.split("\n\n").map((p, i) => (
-                  <p key={i}>{p}</p>
-                ))}
+          <div className="mt-8 flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
+            <div className="lg:max-w-3xl fade-in-up">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50 px-3 py-1 mb-6 text-xs font-bold uppercase tracking-wider text-primary-700">
+                {TREATMENT_CATEGORY_LABELS[treatment.category as TreatmentCategory]}
               </div>
-            </section>
-
-            {/* What's included / excluded */}
-            <div className="mt-10 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-green-200/60 bg-green-50/50 p-5">
-                <h3 className="font-semibold text-zinc-900">Qué incluye el precio</h3>
-                <ul className="mt-3 space-y-2">
-                  {content.includes.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-zinc-600">
-                      <svg className="mt-0.5 h-4 w-4 shrink-0 text-green-500" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
-                      </svg>
-                      <span className="text-pretty">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="rounded-2xl border border-red-200/60 bg-red-50/50 p-5">
-                <h3 className="font-semibold text-zinc-900">Qué NO suele incluir</h3>
-                <ul className="mt-3 space-y-2">
-                  {content.excludes.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-zinc-600">
-                      <svg className="mt-0.5 h-4 w-4 shrink-0 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-                      </svg>
-                      <span className="text-pretty">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <h1 className="text-4xl font-extrabold tracking-tight text-accent-950 text-balance sm:text-5xl lg:text-6xl" style={{ lineHeight: "1.1" }}>
+                {treatment.name}
+              </h1>
+              <p className="mt-4 text-xl text-accent-500 font-medium">
+                Lista de precios transparentes en España <span className="px-2 py-0.5 rounded-md bg-accent-100 text-accent-600 text-sm ml-2">2026</span>
+              </p>
+              {treatment.description && (
+                <p className="mt-6 text-lg text-accent-600 text-pretty leading-relaxed">
+                  {treatment.description}
+                </p>
+              )}
             </div>
 
-            {/* All-inclusive advice */}
-            {content.allInclusiveTip && (
-              <div className="mt-6">
-                <AllInclusiveCallout
-                  treatmentName={treatment.name}
-                  shouldInclude={content.allInclusiveTip.shouldInclude}
-                  potentialSavings={content.allInclusiveTip.potentialSavings}
-                />
+            {/* Quick price answer - Glow Card */}
+            {priceRange && (
+              <div className="shrink-0 relative fade-in-up" style={{ animationDelay: "150ms" }}>
+                <div className="absolute -inset-0.5 rounded-[32px] bg-gradient-to-br from-primary-400 to-teal-600 opacity-20 blur-xl animate-pulse" />
+                <div className="relative rounded-3xl border border-primary-100 bg-white/80 p-8 text-center shadow-xl backdrop-blur-xl lg:min-w-[320px]">
+                  <p className="inline-flex rounded-full bg-primary-50 px-3 py-1 text-sm font-bold text-primary-600 mb-4">
+                    Precio Medio Nacional
+                  </p>
+                  <p className="text-6xl font-extrabold text-accent-950 tabular-nums">
+                    {formatPrice(priceRange.avg)}
+                  </p>
+                  <div className="mt-6 flex items-center justify-between text-sm font-medium border-t border-accent-100 pt-4">
+                    <div className="text-left">
+                      <p className="text-accent-400 uppercase tracking-widest text-[10px]">Mínimo</p>
+                      <p className="text-primary-600">{formatPrice(priceRange.min)}</p>
+                    </div>
+                    <div className="w-px h-8 bg-accent-200 mx-4" />
+                    <div className="text-right">
+                      <p className="text-accent-400 uppercase tracking-widest text-[10px]">Máximo</p>
+                      <p className="text-accent-700">{formatPrice(priceRange.max)}</p>
+                    </div>
+                  </div>
+                  <p className="mt-5 text-xs font-semibold text-accent-400 uppercase tracking-wider bg-accent-50 py-1.5 rounded-lg inline-block px-4">
+                    Extraído de {priceRange.count} fuentes
+                  </p>
+                </div>
               </div>
             )}
+          </div>
 
-            {/* Duration and recovery */}
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl border border-zinc-200/60 bg-white p-4 shadow-soft">
-                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Duración</p>
-                <p className="mt-1 text-sm font-medium text-zinc-900">{content.duration}</p>
-              </div>
-              <div className="rounded-2xl border border-zinc-200/60 bg-white p-4 shadow-soft">
-                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Recuperación</p>
-                <p className="mt-1 text-sm font-medium text-zinc-900">{content.recovery}</p>
-              </div>
+          {/* Visual price range */}
+          {priceRange && (
+            <div className="mt-14 fade-in-up" style={{ animationDelay: "300ms" }}>
+              <PriceRangeBar
+                min={priceRange.min}
+                max={priceRange.max}
+                avg={priceRange.avg}
+                size="lg"
+              />
             </div>
+          )}
+        </div>
+      </section>
 
-            {/* Factors affecting price */}
-            <section className="mt-10">
-              <h2 className="text-xl font-bold text-zinc-900 text-balance">
-                Factores que afectan al precio
-              </h2>
-              <p className="mt-2 text-sm text-zinc-400 text-pretty">
-                El precio final de {treatment.name.toLowerCase()} puede variar según estos factores
-              </p>
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                {content.factorsAffectingPrice.map((factor, i) => (
-                  <div key={i} className="flex items-center gap-3 rounded-xl border border-zinc-200/60 bg-white px-4 py-3 shadow-soft">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-xs font-bold text-zinc-400">
-                      {i + 1}
-                    </span>
-                    <span className="text-sm text-zinc-700 text-pretty">{factor}</span>
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        {/* Rich treatment content */}
+        {(() => {
+          const content = TREATMENT_CONTENT[treatment.slug];
+          if (!content) return null;
+          return (
+            <div className="space-y-16">
+              {/* Long description */}
+              <section className="bg-white rounded-3xl border border-accent-200 p-8 sm:p-12 shadow-sm">
+                <div className="max-w-4xl mx-auto">
+                  <h2 className="text-3xl font-extrabold text-accent-950 text-balance flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    ¿Qué es {treatment.name.toLowerCase()}?
+                  </h2>
+                  <div className="mt-8 prose prose-lg prose-slate max-w-none prose-p:text-accent-600 prose-p:leading-relaxed">
+                    {content.longDescription.split("\n\n").map((p, i) => (
+                      <p key={i}>{p}</p>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </section>
-          </>
-        );
-      })()}
+                </div>
+              </section>
 
-      {/* Insurance comparison */}
-      {insuranceRange && nonInsuranceRange && (
-        <section className="mt-10">
-          <h2 className="text-xl font-bold text-zinc-900 text-balance">
-            ¿Cuánto ahorras con seguro dental?
-          </h2>
-          <p className="mt-1 text-sm text-zinc-400 text-pretty">
-            Comparativa de precios con y sin seguro dental para {treatment.name.toLowerCase()}
-          </p>
-          <div className="mt-4">
+              {/* Bento Box: What's included / excluded / factors / recovery */}
+              <section>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  
+                  {/* Includes Panel */}
+                  <div className="lg:col-span-1 rounded-3xl border border-primary-200 bg-primary-50/50 p-6 sm:p-8 hover:bg-primary-50 transition-colors">
+                    <div className="flex items-center gap-2 mb-6 text-primary-700">
+                      <div className="p-2 bg-white rounded-xl shadow-sm border border-primary-100 text-primary-500">
+                        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                      </div>
+                      <h3 className="text-xl font-bold">Generalmente Incluye</h3>
+                    </div>
+                    <ul className="space-y-4">
+                      {content.includes.map((item, i) => (
+                        <li key={i} className="flex items-start gap-3 text-base text-accent-700 bg-white/60 p-3 rounded-xl border border-primary-100/50 backdrop-blur-sm shadow-sm">
+                          <svg className="mt-0.5 h-5 w-5 shrink-0 text-primary-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
+                          </svg>
+                          <span className="text-pretty">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Excludes Panel */}
+                  <div className="lg:col-span-1 border border-accent-200 bg-white/50 p-6 sm:p-8 rounded-3xl hover:bg-white transition-colors">
+                    <div className="flex items-center gap-2 mb-6 text-red-600">
+                      <div className="p-2 bg-white rounded-xl shadow-sm border border-red-100 text-red-400">
+                        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                      </div>
+                      <h3 className="text-xl font-bold">Ojo: NO suele incluir</h3>
+                    </div>
+                    <ul className="space-y-4">
+                      {content.excludes.map((item, i) => (
+                        <li key={i} className="flex items-start gap-3 text-base text-accent-700 bg-red-50/30 p-3 rounded-xl border border-red-100/30 backdrop-blur-sm">
+                          <svg className="mt-0.5 h-5 w-5 shrink-0 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                          </svg>
+                          <span className="text-pretty">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Metrics & Factors */}
+                  <div className="lg:col-span-1 flex flex-col gap-6">
+                    <div className="bg-white rounded-3xl border border-accent-200 p-6 shadow-sm flex items-center gap-4">
+                      <div className="h-14 w-14 rounded-2xl bg-accent-50 flex items-center justify-center border border-accent-100 text-accent-400 shrink-0">
+                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-widest text-accent-400">Duración Est.</p>
+                        <p className="mt-1 text-base font-semibold text-accent-950">{content.duration}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white rounded-3xl border border-accent-200 p-6 shadow-sm flex items-center gap-4">
+                      <div className="h-14 w-14 rounded-2xl bg-accent-50 flex items-center justify-center border border-accent-100 text-accent-400 shrink-0">
+                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-widest text-accent-400">Recuperación</p>
+                        <p className="mt-1 text-base font-semibold text-accent-950">{content.recovery}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-accent-950 text-white p-6 rounded-3xl border border-accent-900 shadow-xl flex-1 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-8 bg-gradient-to-br from-primary-400 to-transparent blur-3xl opacity-20 w-full h-full" />
+                      <div className="relative z-10">
+                        <h3 className="text-lg font-bold flex items-center gap-2 mb-4">
+                          <svg className="w-5 h-5 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                          Factores de Precio
+                        </h3>
+                        <ul className="space-y-3">
+                           {content.factorsAffectingPrice.map((factor, i) => (
+                            <li key={i} className="flex gap-3 text-sm text-accent-200 border-b border-white/10 pb-3 last:border-0 last:pb-0">
+                              <span className="text-primary-400 font-bold opacity-50">&bull;</span>
+                              {factor}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* All-inclusive advice */}
+              {content.allInclusiveTip && (
+                <div className="w-full">
+                  <AllInclusiveCallout
+                    treatmentName={treatment.name}
+                    shouldInclude={content.allInclusiveTip.shouldInclude}
+                    potentialSavings={content.allInclusiveTip.potentialSavings}
+                  />
+                </div>
+              )}
+            </div>
+          );
+        })()}
+
+        {/* Insurance comparison */}
+        {insuranceRange && nonInsuranceRange && (
+          <section className="mt-20">
+            <h2 className="text-3xl font-extrabold text-accent-950 text-balance mb-2">
+              El ahorro real usando Seguro Dental
+            </h2>
+            <p className="text-lg text-accent-500 mb-8 max-w-3xl">
+              Comparativa de tarifas máximas cobradas a pacientes con aseguradoras de salud privadas frente a pacientes sin cobertura para {treatment.name.toLowerCase()}.
+            </p>
             <InsuranceComparison
               withoutInsurance={nonInsuranceRange}
               withInsurance={insuranceRange}
             />
-          </div>
-          <p className="mt-3 text-xs text-zinc-400 text-pretty">
-            Precios de aseguradoras: {insuranceData.map((d) => d.sourceName).filter((v, i, a) => a.indexOf(v) === i).join(", ")}
-          </p>
-        </section>
-      )}
-
-      {/* Chart */}
-      {chartData.length > 1 && (
-        <section className="mt-10">
-          <h2 className="text-xl font-bold text-zinc-900 text-balance">
-            Comparativa de precios por fuente
-          </h2>
-          <Card className="mt-4 rounded-2xl border-zinc-200/60 shadow-soft">
-            <PriceChart data={chartData} />
-          </Card>
-        </section>
-      )}
-
-      {/* Source table */}
-      {sourceData.length > 0 && (
-        <section className="mt-10">
-          <h2 className="text-xl font-bold text-zinc-900 text-balance">
-            Desglose de precios de {treatment.name.toLowerCase()}
-          </h2>
-          <p className="mt-1 text-sm text-zinc-400 text-pretty">
-            Todos los datos son públicos y verificables
-          </p>
-          <Card className="mt-4 rounded-2xl border-zinc-200/60 shadow-soft" padding="sm">
-            <PriceComparison prices={sourceData} />
-          </Card>
-        </section>
-      )}
-
-      {/* Cities section — rich links */}
-      <section className="mt-10">
-        <h2 className="text-xl font-bold text-zinc-900 text-balance">
-          Precios de {treatment.name.toLowerCase()} por ciudad
-        </h2>
-        <p className="mt-1 text-sm text-zinc-400 text-pretty">
-          Selecciona tu ciudad para ver precios locales
-        </p>
-        <div className="mt-4 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
-          {topCities.map((city) => (
-            <Link
-              key={city.slug}
-              href={`/tratamientos/${treatment.slug}/${city.slug}`}
-              className="press-scale group flex items-center gap-3 rounded-2xl border border-zinc-200/60 px-4 py-3 shadow-soft hover:border-primary-300 hover:bg-primary-50 transition-all"
-            >
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-sm font-bold text-zinc-500 group-hover:bg-primary-100 group-hover:text-primary-600 transition-colors">
-                {city.name.charAt(0)}
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-zinc-700 group-hover:text-primary-700 transition-colors truncate">
-                  {city.name}
-                </p>
-                <p className="text-xs text-zinc-400">Zona {city.zone}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-        {cities.length > 12 && (
-          <p className="mt-3 text-sm text-zinc-400 text-pretty">
-            Y {cities.length - 12} ciudades más disponibles.
-          </p>
+            <p className="mt-4 text-xs font-medium text-accent-400 bg-white inline-block px-4 py-2 border border-accent-200 rounded-full">
+              Fuentes aseguradoras: <span className="text-accent-600">{insuranceData.map((d) => d.sourceName).filter((v, i, a) => a.indexOf(v) === i).join(" • ")}</span>
+            </p>
+          </section>
         )}
-      </section>
 
-      {/* Related treatments */}
-      {relatedTreatments.length > 0 && (
-        <section className="mt-10">
-          <h2 className="text-xl font-bold text-zinc-900 text-balance">
-            Tratamientos relacionados
-          </h2>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {relatedTreatments.map((t) => (
+        {/* Source table and Chart - Side by side if valid */}
+        {(sourceData.length > 0) && (
+          <section className="mt-20 pt-16 border-t border-accent-200/50">
+            <div className="mb-10 text-center max-w-3xl mx-auto">
+              <h2 className="text-3xl font-extrabold text-accent-950 text-balance">
+                Desglose analítico de mercado
+              </h2>
+              <p className="mt-4 text-lg text-accent-500 text-pretty">
+                Transparencia absoluta. Así es como se distribuyen los precios según las clínicas e instituciones que hemos monitorizado.
+              </p>
+            </div>
+            
+            <div className="grid lg:grid-cols-2 gap-8">
+              {sourceData.length > 0 && (
+                <Card className="rounded-3xl border-accent-200 bg-white shadow-soft" padding="sm">
+                  <div className="p-4 border-b border-accent-100 flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-accent-900">Muestra de tarifas</h3>
+                    <span className="text-xs font-bold px-2 py-1 bg-accent-100 text-accent-500 rounded-md">Tabla de datos</span>
+                  </div>
+                  <PriceComparison prices={sourceData} />
+                </Card>
+              )}
+              {chartData.length > 1 && (
+                <Card className="rounded-3xl border-accent-200 bg-white shadow-soft">
+                  <div className="p-4 border-b border-accent-100 mb-4 flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-accent-900">Distribución por ente clínico</h3>
+                    <span className="text-xs font-bold px-2 py-1 bg-accent-100 text-accent-500 rounded-md">Gráfico comparativo</span>
+                  </div>
+                  <PriceChart data={chartData} />
+                </Card>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Cities section — rich links */}
+        <section className="mt-20 pt-16 border-t border-accent-200/50">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+            <div className="max-w-2xl">
+              <h2 className="text-3xl font-extrabold text-accent-950 text-balance">
+                Precios por ciudad en España
+              </h2>
+              <p className="mt-4 text-lg text-accent-500 text-pretty">
+                Filtra las tarifas de {treatment.name.toLowerCase()} según tu comunidad o provincia para ver el coste exacto en tu área geográfica.
+              </p>
+            </div>
+          </div>
+          
+          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {topCities.map((city) => (
               <Link
-                key={t.slug}
-                href={`/tratamientos/${t.slug}`}
-                className="press-scale rounded-full border border-zinc-200/60 px-4 py-2 text-sm font-medium text-zinc-700 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 transition-all"
+                key={city.slug}
+                href={`/tratamientos/${treatment.slug}/${city.slug}`}
+                className="group flex flex-col justify-between rounded-2xl border border-accent-200 bg-white p-5 shadow-sm hover:border-primary-400 hover:shadow-md transition-all duration-200 press-scale"
               >
-                {t.name}
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent-50 text-lg font-bold text-accent-500 group-hover:bg-primary-50 group-hover:text-primary-600 border border-accent-100 transition-colors">
+                    {city.name.charAt(0)}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-base font-bold text-accent-900 group-hover:text-primary-700 transition-colors truncate">
+                      {city.name}
+                    </p>
+                    <p className="text-xs font-medium text-accent-400">Ver precios →</p>
+                  </div>
+                </div>
               </Link>
             ))}
           </div>
-        </section>
-      )}
-
-      {/* CTA */}
-      <section className="mt-10 rounded-2xl bg-gradient-to-r from-primary-50 to-accent-50 border border-primary-100 p-6 sm:p-8 shadow-soft">
-        <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
-          <div>
-            <h3 className="text-lg font-bold text-zinc-900">
-              ¿Cuánto pagaste por {treatment.name.toLowerCase()}?
-            </h3>
-            <p className="mt-1 text-sm text-zinc-500 text-pretty">
-              Comparte tu precio de forma anónima y ayuda a otros pacientes.
+          {cities.length > 12 && (
+            <p className="mt-5 text-sm font-medium text-accent-400 text-center">
+              Filtra en el buscador general para ver datos de {cities.length - 12} ciudades más.
             </p>
+          )}
+        </section>
+
+        {/* CTA */}
+        <section className="mt-20 relative overflow-hidden rounded-[2rem] bg-accent-950 border border-accent-900 shadow-2xl p-8 sm:p-12 lg:p-16">
+          <div className="absolute inset-0 bg-mesh-gradient-dark opacity-100" />
+          <div className="relative z-10 flex flex-col items-center text-center gap-8 max-w-3xl mx-auto">
+            <div className="w-16 h-16 rounded-3xl bg-primary-900/50 border border-primary-500/20 flex items-center justify-center text-primary-400 mb-2">
+              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            </div>
+            <div>
+              <h3 className="text-3xl font-extrabold text-white sm:text-4xl text-balance">
+                ¿Acabas de hacerte este tratamiento?
+              </h3>
+              <p className="mt-4 text-xl text-accent-300 text-pretty leading-relaxed">
+                Nuestra plataforma vive de la colaboración clínica. Si has pagado por {treatment.name.toLowerCase()} recientemente, comparte el precio que te han cobrado. Es 100% anónimo.
+              </p>
+            </div>
+            <Link
+              href="/reportar-precio"
+              className="press-scale shrink-0 inline-flex items-center gap-2 rounded-2xl bg-white px-8 py-4 text-base font-bold text-accent-950 hover:bg-primary-50 hover:scale-105 transition-all shadow-[0_4px_30px_rgba(255,255,255,0.1)]"
+            >
+              Reportar mi Presupuesto
+            </Link>
           </div>
-          <Link
-            href="/reportar-precio"
-            className="press-scale shrink-0 inline-flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
-          >
-            Reportar precio
-          </Link>
-        </div>
-      </section>
+        </section>
 
-      {/* FAQ */}
-      <FAQSection items={faqItems} className="mt-10" />
+        {/* FAQ */}
+        <FAQSection items={faqItems} className="mt-20 pt-16 border-t border-accent-200/50" />
 
-      {/* Disclaimer */}
-      <p className="mt-10 text-xs text-zinc-400 text-pretty leading-relaxed">
-        Los precios mostrados son orientativos y están basados en datos públicos
-        de aseguradoras, cadenas dentales y clínicas. El precio final depende
-        del diagnóstico individualizado del profesional. Última actualización: marzo
-        2026.
-      </p>
+        {/* Disclaimer */}
+        <p className="mt-20 text-xs text-accent-400 text-pretty leading-relaxed bg-white border border-accent-200 p-6 rounded-2xl shadow-sm">
+          Los precios mostrados son estimaciones calculadas en base a datos agregados obtenidos mediante extracción de aseguradoras, agrupaciones empresariales y reportes independientes. En ningún caso suponen una oferta vinculante comercial. La medicina odontoestomatológica depende de variables clínicas de alta complejidad (calidad del instrumental, dificultad quirúrgica, anatomía del paciente). Contacta con un profesional colegiado para obtener un diagnóstico con validez oficial.
+        </p>
+      </div>
     </div>
   );
 }
