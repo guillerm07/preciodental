@@ -139,3 +139,41 @@ export async function getTreatmentsWithNationalPrices() {
     .groupBy(prices.treatmentId, treatments.name, treatments.slug, treatments.category, treatments.displayOrder)
     .orderBy(asc(treatments.displayOrder));
 }
+
+export async function getInsurancePricesForTreatment(treatmentId: number) {
+  return db
+    .select({
+      sourceName: prices.sourceName,
+      sourceType: prices.sourceType,
+      zone: prices.zone,
+      min: sql<number>`MIN(LEAST(COALESCE(${prices.priceMin}, ${prices.priceExact}), COALESCE(${prices.priceExact}, ${prices.priceMin})))`,
+      max: sql<number>`MAX(GREATEST(COALESCE(${prices.priceMax}, ${prices.priceExact}), COALESCE(${prices.priceExact}, ${prices.priceMax})))`,
+      avg: sql<number>`AVG(COALESCE(${prices.priceExact}, (COALESCE(${prices.priceMin}, 0) + COALESCE(${prices.priceMax}, 0)) / 2.0))`,
+    })
+    .from(prices)
+    .where(and(eq(prices.treatmentId, treatmentId), eq(prices.sourceType, "insurance_pdf")))
+    .groupBy(prices.sourceName, prices.sourceType, prices.zone);
+}
+
+export async function getGlobalStats() {
+  const [treatmentCount] = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(treatments);
+  const [priceCount] = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(prices);
+  const [cityCount] = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(cities);
+  const sourceCount = await db
+    .select({ name: prices.sourceName })
+    .from(prices)
+    .groupBy(prices.sourceName);
+
+  return {
+    treatments: Number(treatmentCount.count),
+    prices: Number(priceCount.count),
+    cities: Number(cityCount.count),
+    sources: sourceCount.length,
+  };
+}

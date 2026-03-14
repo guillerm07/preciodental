@@ -4,9 +4,10 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { PriceCard } from "@/components/PriceCard";
 import { FAQSection } from "@/components/FAQSection";
+import { Card } from "@/components/ui/Card";
 import { getCityBySlug, getPricesByCity, getAllCities } from "@/lib/data/queries";
 import { generateCityMetadata } from "@/lib/seo/metadata";
-import { formatPrice } from "@/lib/utils/format";
+import { formatPrice, formatNumber } from "@/lib/utils/format";
 
 interface Props {
   params: Promise<{ ciudad: string }>;
@@ -26,16 +27,36 @@ export default async function CityPage({ params }: Props) {
   const city = await getCityBySlug(ciudad);
   if (!city) notFound();
 
-  const treatmentPrices = await getPricesByCity(city.id);
+  const [treatmentPrices, allCities] = await Promise.all([
+    getPricesByCity(city.id),
+    getAllCities(),
+  ]);
+
+  // Calculate city-level stats
+  const cheapest = treatmentPrices.length > 0
+    ? treatmentPrices.reduce((a, b) => (Number(a.min) < Number(b.min) ? a : b))
+    : null;
+  const mostExpensive = treatmentPrices.length > 0
+    ? treatmentPrices.reduce((a, b) => (Number(a.max) > Number(b.max) ? a : b))
+    : null;
+
+  // Nearby cities from same community
+  const nearbyCities = allCities
+    .filter((c) => c.community === city.community && c.slug !== city.slug)
+    .slice(0, 6);
 
   const faqItems = [
     {
       question: `¿Cuánto cuesta ir al dentista en ${city.name}?`,
-      answer: `Los precios dentales en ${city.name} varían según el tratamiento. Una limpieza dental cuesta entre 40€-100€, un empaste entre 44€-80€, y un implante dental entre 900€-1.800€. ${city.name} está en la Zona ${city.zone} de aseguradoras.`,
+      answer: `Los precios dentales en ${city.name} varían según el tratamiento. ${cheapest ? `El tratamiento más económico es ${cheapest.treatmentName.toLowerCase()} desde ${formatPrice(Number(cheapest.min))}.` : ""} ${city.name} está en la Zona ${city.zone} de aseguradoras, lo que afecta a las tarifas de seguros dentales.`,
     },
     {
       question: `¿${city.name} es cara para tratamientos dentales?`,
-      answer: `${city.name} pertenece a la Zona ${city.zone} de aseguradoras (${city.community}). ${city.zone === "A" ? "La Zona A tiene precios generalmente más bajos." : "La Zona B tiene precios ligeramente superiores."}`,
+      answer: `${city.name} pertenece a la Zona ${city.zone} de aseguradoras (${city.community}). ${city.zone === "A" ? "La Zona A tiene precios generalmente más bajos que la Zona B." : "La Zona B tiene precios ligeramente superiores a la Zona A. Ciudades como Madrid, Barcelona y Bilbao están en esta zona."}`,
+    },
+    {
+      question: `¿Qué seguro dental es mejor en ${city.name}?`,
+      answer: `Para elegir seguro dental en ${city.name}, compara las tarifas de Zona ${city.zone}. Sanitas, Adeslas y Cigna tienen diferentes baremos según la zona geográfica. Consulta los precios por tratamiento en esta página.`,
     },
   ];
 
@@ -49,31 +70,75 @@ export default async function CityPage({ params }: Props) {
         ]}
       />
 
-      <h1 className="text-3xl font-bold text-gray-900">
-        Precios dentales en {city.name} (2026)
-      </h1>
-      <p className="mt-2 text-gray-600">
-        Precios de tratamientos dentales en {city.name}, {city.province} —{" "}
-        {city.community} (Zona {city.zone}).
-      </p>
-
-      {treatmentPrices.length > 0 ? (
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {treatmentPrices.map((tp) => (
-            <PriceCard
-              key={tp.treatmentSlug}
-              treatmentName={tp.treatmentName}
-              treatmentSlug={tp.treatmentSlug}
-              citySlug={city.slug}
-              priceRange={{
-                min: Number(tp.min),
-                max: Number(tp.max),
-                avg: Math.round(Number(tp.avg)),
-                count: Number(tp.count),
-              }}
-            />
-          ))}
+      {/* Header */}
+      <div className="mt-2 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <h1 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+            Precios dentales en {city.name}
+            <span className="block text-lg font-normal text-gray-500 mt-1">
+              {city.province}, {city.community} — Actualizado 2026
+            </span>
+          </h1>
         </div>
+      </div>
+
+      {/* City info cards */}
+      <div className="mt-8 grid gap-4 sm:grid-cols-3">
+        <Card className="text-center border-primary-100">
+          <p className="text-sm font-medium text-gray-500">Zona aseguradoras</p>
+          <p className="mt-1 text-3xl font-extrabold text-primary-600">
+            Zona {city.zone}
+          </p>
+          <p className="mt-1 text-xs text-gray-400">
+            {city.zone === "A" ? "Precios generalmente más bajos" : "Precios ligeramente superiores"}
+          </p>
+        </Card>
+        <Card className="text-center">
+          <p className="text-sm font-medium text-gray-500">Tratamientos</p>
+          <p className="mt-1 text-3xl font-extrabold text-gray-900">
+            {treatmentPrices.length}
+          </p>
+          <p className="mt-1 text-xs text-gray-400">
+            con datos de precios
+          </p>
+        </Card>
+        <Card className="text-center">
+          <p className="text-sm font-medium text-gray-500">Población</p>
+          <p className="mt-1 text-3xl font-extrabold text-gray-900">
+            {formatNumber(city.population || 0)}
+          </p>
+          <p className="mt-1 text-xs text-gray-400">
+            habitantes
+          </p>
+        </Card>
+      </div>
+
+      {/* Treatment prices grid */}
+      {treatmentPrices.length > 0 ? (
+        <section className="mt-10">
+          <h2 className="text-xl font-bold text-gray-900">
+            Todos los precios dentales en {city.name}
+          </h2>
+          <p className="mt-1 text-sm text-gray-500">
+            Toca cualquier tratamiento para ver el desglose por fuente
+          </p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {treatmentPrices.map((tp) => (
+              <PriceCard
+                key={tp.treatmentSlug}
+                treatmentName={tp.treatmentName}
+                treatmentSlug={tp.treatmentSlug}
+                citySlug={city.slug}
+                priceRange={{
+                  min: Number(tp.min),
+                  max: Number(tp.max),
+                  avg: Math.round(Number(tp.avg)),
+                  count: Number(tp.count),
+                }}
+              />
+            ))}
+          </div>
+        </section>
       ) : (
         <div className="mt-8 rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
           <p className="text-gray-600">
@@ -81,13 +146,79 @@ export default async function CityPage({ params }: Props) {
           </p>
           <p className="mt-2 text-sm text-gray-500">
             Consulta los{" "}
-            <Link href="/tratamientos" className="text-primary-600 hover:underline">
+            <Link
+              href="/tratamientos"
+              className="text-primary-600 hover:underline"
+            >
               precios nacionales
             </Link>{" "}
-            como referencia.
+            como referencia, o{" "}
+            <Link
+              href="/reportar-precio"
+              className="text-primary-600 hover:underline"
+            >
+              reporta un precio
+            </Link>{" "}
+            de {city.name}.
           </p>
         </div>
       )}
+
+      {/* Nearby cities */}
+      {nearbyCities.length > 0 && (
+        <section className="mt-10">
+          <h2 className="text-xl font-bold text-gray-900">
+            Otras ciudades en {city.community}
+          </h2>
+          <div className="mt-4 grid gap-2 sm:grid-cols-3">
+            {nearbyCities.map((c) => (
+              <Link
+                key={c.slug}
+                href={`/ciudades/${c.slug}`}
+                className="group flex items-center gap-3 rounded-lg border border-gray-200 px-4 py-3 hover:border-primary-300 hover:bg-primary-50 transition-all"
+              >
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gray-100 text-sm font-bold text-gray-600 group-hover:bg-primary-100 group-hover:text-primary-600 transition-colors">
+                  {c.name.charAt(0)}
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-700 group-hover:text-primary-700">
+                    {c.name}
+                  </p>
+                  <p className="text-xs text-gray-400">{c.province}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-4 text-center">
+            <Link
+              href="/ciudades"
+              className="text-sm font-semibold text-primary-600 hover:text-primary-800"
+            >
+              Ver todas las ciudades →
+            </Link>
+          </div>
+        </section>
+      )}
+
+      {/* CTA */}
+      <section className="mt-10 rounded-2xl bg-gradient-to-r from-primary-50 to-accent-50 border border-primary-100 p-6 sm:p-8">
+        <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
+          <div>
+            <h3 className="text-lg font-bold text-gray-900">
+              ¿Vives en {city.name}?
+            </h3>
+            <p className="mt-1 text-sm text-gray-600">
+              Comparte lo que pagaste en tu clínica y ayuda a otros pacientes de {city.name}.
+            </p>
+          </div>
+          <Link
+            href="/reportar-precio"
+            className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
+          >
+            Reportar precio
+          </Link>
+        </div>
+      </section>
 
       <FAQSection items={faqItems} className="mt-10" />
     </div>
