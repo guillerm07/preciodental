@@ -28,8 +28,10 @@ export default async function ReportPricePage() {
         ]}
       />
 
-      <h1 className="text-3xl font-bold text-gray-900">¿Cuánto pagaste?</h1>
-      <p className="mt-2 text-gray-600">
+      <h1 className="text-3xl font-bold tracking-tight text-zinc-900 text-balance">
+        ¿Cuánto pagaste?
+      </h1>
+      <p className="mt-2 text-zinc-500 text-pretty">
         Comparte el precio que pagaste por un tratamiento dental. Tu aportación
         ayuda a otros pacientes a conocer precios reales.
       </p>

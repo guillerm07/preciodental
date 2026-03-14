@@ -1,7 +1,6 @@
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { PriceCard } from "@/components/PriceCard";
 import { getTreatmentsWithNationalPrices, getTreatmentsByCategory } from "@/lib/data/queries";
@@ -37,19 +36,19 @@ export default async function TreatmentsPage() {
         ]}
       />
 
-      <h1 className="text-3xl font-bold text-gray-900">
+      <h1 className="text-3xl font-bold tracking-tight text-zinc-900 text-balance">
         Precios de tratamientos dentales en España
       </h1>
-      <p className="mt-2 text-gray-600">
+      <p className="mt-2 text-zinc-500 text-pretty">
         Rangos de precios actualizados en 2026 con datos de aseguradoras, cadenas y clínicas.
       </p>
 
       {Object.entries(treatmentsByCategory).map(([category, treatments]) => (
-        <section key={category} className="mt-10">
-          <h2 className="text-xl font-bold text-gray-900">
+        <section key={category} className="mt-12">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-400 text-balance">
             {TREATMENT_CATEGORY_LABELS[category as TreatmentCategory] || category}
           </h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {treatments.map((t) => {
               const range = priceMap.get(t.slug);
               return (

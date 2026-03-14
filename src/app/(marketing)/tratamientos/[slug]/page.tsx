@@ -165,17 +165,17 @@ export default async function TreatmentPage({ params }: Props) {
       {/* Hero section */}
       <div className="mt-2 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div className="lg:max-w-2xl">
-          <p className="text-sm font-medium text-primary-600">
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary-600">
             {TREATMENT_CATEGORY_LABELS[treatment.category as TreatmentCategory]}
           </p>
-          <h1 className="mt-1 text-3xl font-extrabold text-gray-900 sm:text-4xl">
+          <h1 className="mt-1 text-3xl font-bold tracking-tight text-zinc-900 text-balance sm:text-4xl">
             {treatment.name}
-            <span className="text-gray-400 text-2xl font-normal ml-2">
+            <span className="text-zinc-400 text-2xl font-normal ml-2">
               — Precio en España 2026
             </span>
           </h1>
           {treatment.description && (
-            <p className="mt-3 text-lg text-gray-600 leading-relaxed">
+            <p className="mt-3 text-lg text-zinc-500 text-pretty leading-relaxed">
               {treatment.description}
             </p>
           )}
@@ -183,15 +183,15 @@ export default async function TreatmentPage({ params }: Props) {
 
         {/* Quick price answer */}
         {priceRange && (
-          <div className="shrink-0 rounded-2xl border-2 border-primary-200 bg-primary-50 p-6 text-center lg:min-w-[260px]">
+          <div className="shrink-0 rounded-2xl border-2 border-primary-200 bg-primary-50 p-6 text-center shadow-glow-primary lg:min-w-[260px]">
             <p className="text-sm font-medium text-primary-700">Precio medio nacional</p>
-            <p className="mt-1 text-4xl font-extrabold text-primary-600">
+            <p className="mt-1 text-4xl font-extrabold text-primary-600 tabular-nums">
               {formatPrice(priceRange.avg)}
             </p>
-            <p className="mt-1 text-sm text-primary-500">
+            <p className="mt-1 text-sm text-primary-500 tabular-nums">
               {formatPrice(priceRange.min)} — {formatPrice(priceRange.max)}
             </p>
-            <p className="mt-2 text-xs text-primary-400">
+            <p className="mt-2 text-xs text-primary-400 tabular-nums">
               Basado en {priceRange.count} fuentes
             </p>
           </div>
@@ -213,10 +213,10 @@ export default async function TreatmentPage({ params }: Props) {
       {/* Insurance comparison */}
       {insuranceRange && nonInsuranceRange && (
         <section className="mt-10">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-zinc-900 text-balance">
             ¿Cuánto ahorras con seguro dental?
           </h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-zinc-400 text-pretty">
             Comparativa de precios con y sin seguro dental para {treatment.name.toLowerCase()}
           </p>
           <div className="mt-4">
@@ -225,7 +225,7 @@ export default async function TreatmentPage({ params }: Props) {
               withInsurance={insuranceRange}
             />
           </div>
-          <p className="mt-3 text-xs text-gray-400">
+          <p className="mt-3 text-xs text-zinc-400 text-pretty">
             Precios de aseguradoras: {insuranceData.map((d) => d.sourceName).filter((v, i, a) => a.indexOf(v) === i).join(", ")}
           </p>
         </section>
@@ -234,10 +234,10 @@ export default async function TreatmentPage({ params }: Props) {
       {/* Chart */}
       {chartData.length > 1 && (
         <section className="mt-10">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-zinc-900 text-balance">
             Comparativa de precios por fuente
           </h2>
-          <Card className="mt-4">
+          <Card className="mt-4 rounded-2xl border-zinc-200/60 shadow-soft">
             <PriceChart data={chartData} />
           </Card>
         </section>
@@ -246,13 +246,13 @@ export default async function TreatmentPage({ params }: Props) {
       {/* Source table */}
       {sourceData.length > 0 && (
         <section className="mt-10">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-zinc-900 text-balance">
             Desglose de precios de {treatment.name.toLowerCase()}
           </h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-zinc-400 text-pretty">
             Todos los datos son públicos y verificables
           </p>
-          <Card className="mt-4" padding="sm">
+          <Card className="mt-4 rounded-2xl border-zinc-200/60 shadow-soft" padding="sm">
             <PriceComparison prices={sourceData} />
           </Card>
         </section>
@@ -260,10 +260,10 @@ export default async function TreatmentPage({ params }: Props) {
 
       {/* Cities section — rich links */}
       <section className="mt-10">
-        <h2 className="text-xl font-bold text-gray-900">
+        <h2 className="text-xl font-bold text-zinc-900 text-balance">
           Precios de {treatment.name.toLowerCase()} por ciudad
         </h2>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-zinc-400 text-pretty">
           Selecciona tu ciudad para ver precios locales
         </p>
         <div className="mt-4 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
@@ -271,22 +271,22 @@ export default async function TreatmentPage({ params }: Props) {
             <Link
               key={city.slug}
               href={`/tratamientos/${treatment.slug}/${city.slug}`}
-              className="group flex items-center gap-3 rounded-lg border border-gray-200 px-4 py-3 hover:border-primary-300 hover:bg-primary-50 transition-all"
+              className="press-scale group flex items-center gap-3 rounded-2xl border border-zinc-200/60 px-4 py-3 shadow-soft hover:border-primary-300 hover:bg-primary-50 transition-all"
             >
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gray-100 text-sm font-bold text-gray-600 group-hover:bg-primary-100 group-hover:text-primary-600 transition-colors">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-sm font-bold text-zinc-500 group-hover:bg-primary-100 group-hover:text-primary-600 transition-colors">
                 {city.name.charAt(0)}
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-medium text-gray-700 group-hover:text-primary-700 transition-colors truncate">
+                <p className="text-sm font-medium text-zinc-700 group-hover:text-primary-700 transition-colors truncate">
                   {city.name}
                 </p>
-                <p className="text-xs text-gray-400">Zona {city.zone}</p>
+                <p className="text-xs text-zinc-400">Zona {city.zone}</p>
               </div>
             </Link>
           ))}
         </div>
         {cities.length > 12 && (
-          <p className="mt-3 text-sm text-gray-500">
+          <p className="mt-3 text-sm text-zinc-400 text-pretty">
             Y {cities.length - 12} ciudades más disponibles.
           </p>
         )}
@@ -295,7 +295,7 @@ export default async function TreatmentPage({ params }: Props) {
       {/* Related treatments */}
       {relatedTreatments.length > 0 && (
         <section className="mt-10">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-zinc-900 text-balance">
             Tratamientos relacionados
           </h2>
           <div className="mt-4 flex flex-wrap gap-2">
@@ -303,7 +303,7 @@ export default async function TreatmentPage({ params }: Props) {
               <Link
                 key={t.slug}
                 href={`/tratamientos/${t.slug}`}
-                className="rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 transition-all"
+                className="press-scale rounded-full border border-zinc-200/60 px-4 py-2 text-sm font-medium text-zinc-700 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 transition-all"
               >
                 {t.name}
               </Link>
@@ -313,19 +313,19 @@ export default async function TreatmentPage({ params }: Props) {
       )}
 
       {/* CTA */}
-      <section className="mt-10 rounded-2xl bg-gradient-to-r from-primary-50 to-accent-50 border border-primary-100 p-6 sm:p-8">
+      <section className="mt-10 rounded-2xl bg-gradient-to-r from-primary-50 to-accent-50 border border-primary-100 p-6 sm:p-8 shadow-soft">
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
           <div>
-            <h3 className="text-lg font-bold text-gray-900">
+            <h3 className="text-lg font-bold text-zinc-900">
               ¿Cuánto pagaste por {treatment.name.toLowerCase()}?
             </h3>
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-sm text-zinc-500 text-pretty">
               Comparte tu precio de forma anónima y ayuda a otros pacientes.
             </p>
           </div>
           <Link
             href="/reportar-precio"
-            className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
+            className="press-scale shrink-0 inline-flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
           >
             Reportar precio
           </Link>
@@ -336,7 +336,7 @@ export default async function TreatmentPage({ params }: Props) {
       <FAQSection items={faqItems} className="mt-10" />
 
       {/* Disclaimer */}
-      <p className="mt-10 text-xs text-gray-400 leading-relaxed">
+      <p className="mt-10 text-xs text-zinc-400 text-pretty leading-relaxed">
         Los precios mostrados son orientativos y están basados en datos públicos
         de aseguradoras, cadenas dentales y clínicas. El precio final depende
         del diagnóstico individualizado del profesional. Última actualización: marzo

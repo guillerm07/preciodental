@@ -169,29 +169,29 @@ export default async function TreatmentCityPage({ params }: Props) {
       <div className="mt-2 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+            <span className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-500">
               Zona {city.zone}
             </span>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-zinc-400">
               {city.province}, {city.community}
             </span>
           </div>
-          <h1 className="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">
+          <h1 className="mt-2 text-3xl font-extrabold text-zinc-900 tracking-tight text-balance sm:text-4xl">
             {treatment.name} en {city.name}
-            <span className="block text-lg font-normal text-gray-500 mt-1">
+            <span className="block text-lg font-normal text-zinc-400 mt-1">
               Precios actualizados 2026
             </span>
           </h1>
         </div>
 
         {cityPriceRange && (
-          <div className="shrink-0 rounded-2xl border-2 border-primary-200 bg-primary-50 p-6 text-center lg:min-w-[260px]">
-            <p className="text-sm font-medium text-primary-700">Precio medio en {city.name}</p>
-            <p className="mt-1 text-4xl font-extrabold text-primary-600">
+          <div className="shrink-0 rounded-2xl border-2 border-primary-200 bg-primary-50 p-6 text-center shadow-soft lg:min-w-[260px]">
+            <p className="text-sm font-medium text-primary-700 text-pretty">Precio medio en {city.name}</p>
+            <p className="mt-1 text-4xl font-extrabold text-primary-600 tabular-nums">
               {formatPrice(cityPriceRange.avg)}
             </p>
-            <p className="mt-1 text-sm text-primary-500">
-              {formatPrice(cityPriceRange.min)} — {formatPrice(cityPriceRange.max)}
+            <p className="mt-1 text-sm text-primary-500 text-pretty">
+              <span className="tabular-nums">{formatPrice(cityPriceRange.min)}</span> — <span className="tabular-nums">{formatPrice(cityPriceRange.max)}</span>
             </p>
             {differencePercent != null && (
               <div
@@ -200,11 +200,11 @@ export default async function TreatmentCityPage({ params }: Props) {
                     ? "bg-green-100 text-green-700"
                     : differencePercent > 0
                     ? "bg-red-100 text-red-700"
-                    : "bg-gray-100 text-gray-700"
+                    : "bg-zinc-100 text-zinc-700"
                 }`}
               >
                 {differencePercent < 0 ? "↓" : differencePercent > 0 ? "↑" : "="}
-                {formatPercent(differencePercent)} vs media nacional
+                <span className="tabular-nums">{formatPercent(differencePercent)}</span> vs media nacional
               </div>
             )}
           </div>
@@ -228,27 +228,27 @@ export default async function TreatmentCityPage({ params }: Props) {
       {/* National comparison card */}
       {differencePercent != null && nationalPriceRange && cityPriceRange && (
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <Card className="border-primary-100">
+          <Card className="border-primary-100 border-zinc-200/60 shadow-soft rounded-2xl">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100">
                 <span className="text-lg font-bold text-primary-600">{city.name.charAt(0)}</span>
               </div>
               <div>
-                <p className="text-sm text-gray-500">{city.name}</p>
-                <p className="text-2xl font-extrabold text-gray-900">
+                <p className="text-sm text-zinc-400 text-pretty">{city.name}</p>
+                <p className="text-2xl font-extrabold text-zinc-900 tabular-nums">
                   {formatPrice(cityPriceRange.avg)}
                 </p>
               </div>
             </div>
           </Card>
-          <Card>
+          <Card className="border-zinc-200/60 shadow-soft rounded-2xl">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100">
                 <span className="text-lg">🇪🇸</span>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Media nacional</p>
-                <p className="text-2xl font-extrabold text-gray-900">
+                <p className="text-sm text-zinc-400 text-pretty">Media nacional</p>
+                <p className="text-2xl font-extrabold text-zinc-900 tabular-nums">
                   {formatPrice(nationalPriceRange.avg)}
                 </p>
               </div>
@@ -260,7 +260,7 @@ export default async function TreatmentCityPage({ params }: Props) {
       {/* Insurance comparison */}
       {insuranceRange && nonInsuranceRange && (
         <section className="mt-10">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-zinc-900 text-balance">
             ¿Cuánto ahorras con seguro dental en {city.name}?
           </h2>
           <div className="mt-4">
@@ -275,13 +275,13 @@ export default async function TreatmentCityPage({ params }: Props) {
       {/* Source table */}
       {sourceData.length > 0 && (
         <section className="mt-10">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-zinc-900 text-balance">
             Precios por fuente en {city.name}
           </h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-zinc-400 text-pretty">
             Datos de aseguradoras, cadenas y clínicas en Zona {city.zone}
           </p>
-          <Card className="mt-4" padding="sm">
+          <Card className="mt-4 border-zinc-200/60 shadow-soft rounded-2xl" padding="sm">
             <PriceComparison prices={sourceData} />
           </Card>
         </section>
@@ -289,13 +289,13 @@ export default async function TreatmentCityPage({ params }: Props) {
 
       {/* Other cities */}
       <section className="mt-10">
-        <h2 className="text-xl font-bold text-gray-900">
+        <h2 className="text-xl font-bold text-zinc-900 text-balance">
           {treatment.name} en otras ciudades
         </h2>
         <div className="mt-4 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
           <Link
             href={`/tratamientos/${treatment.slug}`}
-            className="flex items-center gap-2 rounded-lg border-2 border-primary-200 bg-primary-50 px-4 py-3 text-sm font-semibold text-primary-700 hover:bg-primary-100 transition-colors"
+            className="press-scale flex items-center gap-2 rounded-lg border-2 border-primary-200 bg-primary-50 px-4 py-3 text-sm font-semibold text-primary-700 hover:bg-primary-100 transition-colors"
           >
             🇪🇸 Media nacional
           </Link>
@@ -303,10 +303,10 @@ export default async function TreatmentCityPage({ params }: Props) {
             <Link
               key={c.slug}
               href={`/tratamientos/${treatment.slug}/${c.slug}`}
-              className="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 transition-all"
+              className="press-scale rounded-lg border border-zinc-200/60 px-4 py-3 text-sm font-medium text-zinc-700 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 transition-all"
             >
               {c.name}
-              <span className="ml-1 text-xs text-gray-400">Z.{c.zone}</span>
+              <span className="ml-1 text-xs text-zinc-400">Z.{c.zone}</span>
             </Link>
           ))}
         </div>
@@ -316,16 +316,16 @@ export default async function TreatmentCityPage({ params }: Props) {
       <section className="mt-10 rounded-2xl bg-gradient-to-r from-primary-50 to-accent-50 border border-primary-100 p-6 sm:p-8">
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
           <div>
-            <h3 className="text-lg font-bold text-gray-900">
+            <h3 className="text-lg font-bold text-zinc-900">
               ¿Te han hecho {treatment.name.toLowerCase()} en {city.name}?
             </h3>
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-sm text-zinc-500 text-pretty">
               Comparte tu precio y ayuda a otros pacientes de {city.name}.
             </p>
           </div>
           <Link
             href="/reportar-precio"
-            className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
+            className="press-scale shrink-0 inline-flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
           >
             Reportar precio
           </Link>
@@ -336,7 +336,7 @@ export default async function TreatmentCityPage({ params }: Props) {
       <FAQSection items={faqItems} className="mt-10" />
 
       {/* Disclaimer */}
-      <p className="mt-10 text-xs text-gray-400 leading-relaxed">
+      <p className="mt-10 text-xs text-zinc-400 leading-relaxed text-pretty">
         Los precios mostrados son orientativos. {city.name} pertenece a la
         Zona {city.zone || "B"} de aseguradoras ({city.community}). Última
         actualización: marzo 2026.

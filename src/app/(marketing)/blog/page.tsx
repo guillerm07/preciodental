@@ -3,7 +3,6 @@ export const dynamic = "force-dynamic";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { Card } from "@/components/ui/Card";
 import { db } from "@/lib/db";
 import { articles } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
@@ -32,43 +31,41 @@ export default async function BlogPage() {
         ]}
       />
 
-      <h1 className="text-3xl font-bold text-gray-900">Blog</h1>
-      <p className="mt-2 text-gray-600">
+      <h1 className="text-3xl font-bold tracking-tight text-zinc-900 text-balance">Blog</h1>
+      <p className="mt-2 text-zinc-500 text-pretty">
         Guías, comparativas y consejos sobre precios dentales en España.
       </p>
 
       {publishedArticles.length > 0 ? (
-        <div className="mt-8 space-y-6">
+        <div className="mt-8 divide-y divide-zinc-100">
           {publishedArticles.map((article) => (
             <Link
               key={article.slug}
               href={`/blog/${article.slug}`}
-              className="block group"
+              className="group block py-6 first:pt-0 press-scale"
             >
-              <Card className="transition-shadow hover:shadow-md group-hover:border-primary-300">
-                <h2 className="text-xl font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
-                  {article.title}
-                </h2>
-                <p className="mt-2 text-sm text-gray-600">{article.excerpt}</p>
-                <div className="mt-3 flex items-center gap-3 text-xs text-gray-400">
-                  {article.publishedAt && (
-                    <span>{formatDate(article.publishedAt)}</span>
-                  )}
-                  <span>{article.readingTime} min de lectura</span>
-                </div>
-              </Card>
+              <h2 className="text-lg font-semibold text-zinc-900 group-hover:text-primary-700 transition-colors text-balance">
+                {article.title}
+              </h2>
+              <p className="mt-2 text-sm text-zinc-500 text-pretty">{article.excerpt}</p>
+              <div className="mt-3 flex items-center gap-3 text-xs text-zinc-400">
+                {article.publishedAt && (
+                  <span>{formatDate(article.publishedAt)}</span>
+                )}
+                <span>{article.readingTime} min de lectura</span>
+              </div>
             </Link>
           ))}
         </div>
       ) : (
-        <Card className="mt-8 text-center">
-          <p className="text-gray-600">
+        <div className="mt-8 rounded-2xl border border-zinc-200/60 bg-zinc-50 p-8 text-center shadow-soft">
+          <p className="text-zinc-500 text-pretty">
             Estamos preparando artículos sobre precios dentales.
           </p>
-          <p className="mt-1 text-sm text-gray-400">
+          <p className="mt-1 text-sm text-zinc-400 text-pretty">
             Pronto publicaremos guías completas por tratamiento y ciudad.
           </p>
-        </Card>
+        </div>
       )}
     </div>
   );

@@ -28,10 +28,10 @@ export default async function ComparePage() {
         ]}
       />
 
-      <h1 className="text-3xl font-bold text-gray-900">
+      <h1 className="text-3xl font-bold tracking-tight text-zinc-900 text-balance">
         Comparar precios dentales
       </h1>
-      <p className="mt-2 text-gray-600">
+      <p className="mt-2 text-zinc-500 text-pretty">
         Selecciona un tratamiento y una ciudad para ver el rango de precios con
         datos de aseguradoras, cadenas y clínicas.
       </p>

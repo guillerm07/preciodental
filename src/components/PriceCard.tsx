@@ -26,37 +26,38 @@ export function PriceCard({
 
   return (
     <Link href={href} className={`block group ${className}`}>
-      <div className="rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-primary-300 hover:shadow-md">
-        <div className="flex items-start justify-between gap-2">
-          <h3 className="font-semibold text-gray-900 group-hover:text-primary-600 transition-colors leading-tight">
+      <div className="rounded-2xl border border-zinc-200/60 bg-white p-5 shadow-soft transition-all duration-200 hover:shadow-elevated hover:border-zinc-300/60 press-scale">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="font-semibold text-zinc-900 group-hover:text-primary-700 transition-colors leading-snug">
             {treatmentName}
           </h3>
-          <span className="shrink-0 text-xl font-extrabold text-primary-600">
+          <span className="shrink-0 text-xl font-bold text-zinc-900 tabular-nums">
             {formatPrice(priceRange.avg)}
           </span>
         </div>
 
         {/* Mini range bar */}
-        <div className="mt-3 relative">
+        <div className="mt-4 relative">
           <div
-            className="h-2 w-full rounded-full overflow-hidden"
+            className="h-1.5 w-full rounded-full overflow-hidden"
             style={{
-              background: "linear-gradient(to right, #10b981, #3b82f6, #ef4444)",
+              background: "linear-gradient(to right, #22c55e, #facc15, #ef4444)",
             }}
           />
-          {/* Average marker */}
           <div
-            className="absolute top-0 -translate-x-1/2"
-            style={{ left: `${Math.min(Math.max(avgPos, 5), 95)}%` }}
+            className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2"
+            style={{ left: `${Math.min(Math.max(avgPos, 6), 94)}%` }}
           >
-            <div className="w-0.5 h-4 -mt-1 bg-gray-800 rounded-full" />
+            <div className="w-2.5 h-2.5 rounded-full bg-zinc-900 border-2 border-white shadow-sm" />
           </div>
         </div>
 
-        <div className="mt-2 flex items-center justify-between text-xs">
-          <span className="text-accent-600 font-semibold">{formatPrice(priceRange.min)}</span>
-          <span className="text-gray-400">{priceRange.count} fuente{priceRange.count > 1 ? "s" : ""}</span>
-          <span className="text-gray-500">{formatPrice(priceRange.max)}</span>
+        <div className="mt-2.5 flex items-center justify-between text-xs">
+          <span className="text-primary-600 font-medium tabular-nums">{formatPrice(priceRange.min)}</span>
+          <span className="text-zinc-400">
+            {priceRange.count} fuente{priceRange.count > 1 ? "s" : ""}
+          </span>
+          <span className="text-zinc-500 tabular-nums">{formatPrice(priceRange.max)}</span>
         </div>
       </div>
     </Link>

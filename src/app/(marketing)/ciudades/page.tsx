@@ -31,13 +31,13 @@ export default async function CitiesPage() {
         ]}
       />
 
-      <h1 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+      <h1 className="text-3xl font-extrabold text-zinc-900 tracking-tight text-balance sm:text-4xl">
         Precios dentales por ciudad
-        <span className="block text-lg font-normal text-gray-500 mt-1">
+        <span className="block text-lg font-normal text-zinc-500 mt-1">
           {cities.length} ciudades con datos de precios actualizados
         </span>
       </h1>
-      <p className="mt-3 max-w-3xl text-gray-600">
+      <p className="mt-3 max-w-3xl text-zinc-500 text-pretty">
         Selecciona una ciudad para ver los precios de todos los tratamientos dentales.
         Los precios de aseguradoras varían según la zona geográfica (A o B).
       </p>
@@ -46,11 +46,11 @@ export default async function CitiesPage() {
       <div className="mt-6 flex items-center gap-6 text-sm">
         <span className="flex items-center gap-2">
           <span className="inline-flex h-6 w-6 items-center justify-center rounded bg-accent-100 text-xs font-bold text-accent-700">A</span>
-          <span className="text-gray-600">Zona A — Precios más bajos</span>
+          <span className="text-zinc-500">Zona A — Precios más bajos</span>
         </span>
         <span className="flex items-center gap-2">
-          <span className="inline-flex h-6 w-6 items-center justify-center rounded bg-gray-100 text-xs font-bold text-gray-700">B</span>
-          <span className="text-gray-600">Zona B — Precios superiores</span>
+          <span className="inline-flex h-6 w-6 items-center justify-center rounded bg-zinc-100 text-xs font-bold text-zinc-900">B</span>
+          <span className="text-zinc-500">Zona B — Precios superiores</span>
         </span>
       </div>
 
@@ -58,27 +58,27 @@ export default async function CitiesPage() {
         .sort(([, a], [, b]) => b.length - a.length)
         .map(([community, commCities]) => (
           <section key={community} className="mt-8">
-            <h2 className="text-lg font-bold text-gray-900">{community}</h2>
+            <h2 className="text-lg font-bold text-zinc-900 text-balance">{community}</h2>
             <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {commCities.map((city) => (
                 <Link
                   key={city.slug}
                   href={`/ciudades/${city.slug}`}
-                  className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 hover:border-primary-300 hover:shadow-sm transition-all"
+                  className="press-scale group flex items-center gap-3 rounded-2xl border border-zinc-200/60 bg-white px-4 py-3 hover:border-primary-300 hover:shadow-sm transition-all shadow-soft"
                 >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-sm font-bold text-gray-600 group-hover:bg-primary-100 group-hover:text-primary-600 transition-colors">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-sm font-bold text-zinc-500 group-hover:bg-primary-100 group-hover:text-primary-600 transition-colors">
                     {city.name.charAt(0)}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium text-gray-900 group-hover:text-primary-600 transition-colors">
+                    <p className="font-medium text-zinc-900 group-hover:text-primary-600 transition-colors text-pretty">
                       {city.name}
                     </p>
-                    <p className="text-xs text-gray-500">{city.province}</p>
+                    <p className="text-xs text-zinc-400">{city.province}</p>
                   </div>
                   <span className={`shrink-0 inline-flex h-6 w-6 items-center justify-center rounded text-xs font-bold ${
                     city.zone === "A"
                       ? "bg-accent-100 text-accent-700"
-                      : "bg-gray-100 text-gray-600"
+                      : "bg-zinc-100 text-zinc-500"
                   }`}>
                     {city.zone}
                   </span>

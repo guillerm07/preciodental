@@ -28,72 +28,72 @@ export function PriceRangeBar({
       ? ((highlightValue - min) / range) * 100
       : null;
 
-  const heights = { sm: "h-3", md: "h-4", lg: "h-6" };
-  const textSizes = { sm: "text-xs", md: "text-sm", lg: "text-base" };
+  const heights = { sm: "h-2", md: "h-3", lg: "h-4" };
 
   return (
     <div className={`w-full ${className}`}>
       {/* Labels */}
-      <div className={`flex items-end justify-between mb-2 ${textSizes[size]}`}>
-        <div>
-          <p className="text-gray-400 text-xs">Mínimo</p>
-          <p className="font-bold text-accent-600">{formatPrice(min)}</p>
+      {size !== "sm" && (
+        <div className="flex items-end justify-between mb-3">
+          <div>
+            <p className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Mínimo</p>
+            <p className="text-lg font-semibold text-primary-600 tabular-nums">{formatPrice(min)}</p>
+          </div>
+          <div className="text-center">
+            <p className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Media</p>
+            <p className="text-2xl font-bold text-zinc-900 tabular-nums">{formatPrice(avg)}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Máximo</p>
+            <p className="text-lg font-semibold text-zinc-500 tabular-nums">{formatPrice(max)}</p>
+          </div>
         </div>
-        <div className="text-center">
-          <p className="text-gray-400 text-xs">Media</p>
-          <p className="font-bold text-primary-600 text-lg">{formatPrice(avg)}</p>
-        </div>
-        <div className="text-right">
-          <p className="text-gray-400 text-xs">Máximo</p>
-          <p className="font-bold text-gray-500">{formatPrice(max)}</p>
-        </div>
-      </div>
+      )}
 
       {/* Bar */}
       <div className="relative">
         <div
           className={`w-full rounded-full ${heights[size]} overflow-hidden`}
           style={{
-            background: "linear-gradient(to right, #10b981, #3b82f6, #ef4444)",
+            background: "linear-gradient(to right, #22c55e, #facc15, #ef4444)",
           }}
         />
 
         {/* Average marker */}
         <div
-          className="absolute top-0 -translate-x-1/2"
-          style={{ left: `${Math.min(Math.max(avgPosition, 5), 95)}%` }}
+          className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{ left: `${Math.min(Math.max(avgPosition, 4), 96)}%` }}
         >
-          <div
-            className={`w-1 bg-primary-800 rounded-full ${
-              size === "lg" ? "h-8 -mt-1" : "h-6 -mt-1"
-            }`}
-          />
-          <div className="text-xs font-semibold text-primary-700 mt-0.5 whitespace-nowrap -translate-x-1/4">
-            Media
-          </div>
+          <div className={`rounded-full bg-zinc-900 border-2 border-white shadow-md ${
+            size === "sm" ? "w-3 h-3" : size === "md" ? "w-4 h-4" : "w-5 h-5"
+          }`} />
         </div>
 
         {/* Highlight marker */}
         {highlightPosition != null && highlightValue && (
           <div
-            className="absolute top-0 -translate-x-1/2"
+            className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2"
             style={{
-              left: `${Math.min(Math.max(highlightPosition, 5), 95)}%`,
+              left: `${Math.min(Math.max(highlightPosition, 4), 96)}%`,
             }}
           >
-            <div className="w-2 h-8 -mt-1 bg-yellow-500 rounded-full border-2 border-white shadow" />
-            <div className="text-xs font-bold text-yellow-700 mt-0.5 whitespace-nowrap">
-              {highlightLabel || formatPrice(highlightValue)}
-            </div>
+            <div className="w-5 h-5 rounded-full bg-amber-500 border-2 border-white shadow-md" />
+            {size !== "sm" && (
+              <div className="absolute top-7 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
+                {highlightLabel || formatPrice(highlightValue)}
+              </div>
+            )}
           </div>
         )}
       </div>
 
       {/* Scale labels */}
-      <div className="flex justify-between mt-1">
-        <span className="text-[10px] text-gray-300">{formatPrice(min)}</span>
-        <span className="text-[10px] text-gray-300">{formatPrice(max)}</span>
-      </div>
+      {size !== "sm" && (
+        <div className="flex justify-between mt-1.5">
+          <span className="text-[10px] text-zinc-300 tabular-nums">{formatPrice(min)}</span>
+          <span className="text-[10px] text-zinc-300 tabular-nums">{formatPrice(max)}</span>
+        </div>
+      )}
     </div>
   );
 }

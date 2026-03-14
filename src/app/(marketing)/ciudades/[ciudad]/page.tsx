@@ -73,9 +73,9 @@ export default async function CityPage({ params }: Props) {
       {/* Header */}
       <div className="mt-2 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <h1 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+          <h1 className="text-3xl font-extrabold text-zinc-900 tracking-tight text-balance sm:text-4xl">
             Precios dentales en {city.name}
-            <span className="block text-lg font-normal text-gray-500 mt-1">
+            <span className="block text-lg font-normal text-zinc-500 mt-1">
               {city.province}, {city.community} — Actualizado 2026
             </span>
           </h1>
@@ -84,30 +84,30 @@ export default async function CityPage({ params }: Props) {
 
       {/* City info cards */}
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        <Card className="text-center border-primary-100">
-          <p className="text-sm font-medium text-gray-500">Zona aseguradoras</p>
-          <p className="mt-1 text-3xl font-extrabold text-primary-600">
+        <Card className="text-center border-primary-100 rounded-2xl shadow-soft">
+          <p className="text-sm font-medium text-zinc-500 text-pretty">Zona aseguradoras</p>
+          <p className="mt-1 text-3xl font-extrabold text-primary-600 tabular-nums">
             Zona {city.zone}
           </p>
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="mt-1 text-xs text-zinc-400 text-pretty">
             {city.zone === "A" ? "Precios generalmente más bajos" : "Precios ligeramente superiores"}
           </p>
         </Card>
-        <Card className="text-center">
-          <p className="text-sm font-medium text-gray-500">Tratamientos</p>
-          <p className="mt-1 text-3xl font-extrabold text-gray-900">
+        <Card className="text-center rounded-2xl shadow-soft">
+          <p className="text-sm font-medium text-zinc-500 text-pretty">Tratamientos</p>
+          <p className="mt-1 text-3xl font-extrabold text-zinc-900 tabular-nums">
             {treatmentPrices.length}
           </p>
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="mt-1 text-xs text-zinc-400 text-pretty">
             con datos de precios
           </p>
         </Card>
-        <Card className="text-center">
-          <p className="text-sm font-medium text-gray-500">Población</p>
-          <p className="mt-1 text-3xl font-extrabold text-gray-900">
+        <Card className="text-center rounded-2xl shadow-soft">
+          <p className="text-sm font-medium text-zinc-500 text-pretty">Población</p>
+          <p className="mt-1 text-3xl font-extrabold text-zinc-900 tabular-nums">
             {formatNumber(city.population || 0)}
           </p>
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="mt-1 text-xs text-zinc-400 text-pretty">
             habitantes
           </p>
         </Card>
@@ -116,10 +116,10 @@ export default async function CityPage({ params }: Props) {
       {/* Treatment prices grid */}
       {treatmentPrices.length > 0 ? (
         <section className="mt-10">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-zinc-900 text-balance">
             Todos los precios dentales en {city.name}
           </h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-zinc-500 text-pretty">
             Toca cualquier tratamiento para ver el desglose por fuente
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -140,11 +140,11 @@ export default async function CityPage({ params }: Props) {
           </div>
         </section>
       ) : (
-        <div className="mt-8 rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
-          <p className="text-gray-600">
+        <div className="mt-8 rounded-2xl border border-zinc-200/60 bg-zinc-50 p-8 text-center shadow-soft">
+          <p className="text-zinc-500 text-pretty">
             Todavía no tenemos datos de precios específicos para {city.name}.
           </p>
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-zinc-500 text-pretty">
             Consulta los{" "}
             <Link
               href="/tratamientos"
@@ -167,7 +167,7 @@ export default async function CityPage({ params }: Props) {
       {/* Nearby cities */}
       {nearbyCities.length > 0 && (
         <section className="mt-10">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-zinc-900 text-balance">
             Otras ciudades en {city.community}
           </h2>
           <div className="mt-4 grid gap-2 sm:grid-cols-3">
@@ -175,16 +175,16 @@ export default async function CityPage({ params }: Props) {
               <Link
                 key={c.slug}
                 href={`/ciudades/${c.slug}`}
-                className="group flex items-center gap-3 rounded-lg border border-gray-200 px-4 py-3 hover:border-primary-300 hover:bg-primary-50 transition-all"
+                className="press-scale group flex items-center gap-3 rounded-2xl border border-zinc-200/60 px-4 py-3 hover:border-primary-300 hover:bg-primary-50 transition-all shadow-soft"
               >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gray-100 text-sm font-bold text-gray-600 group-hover:bg-primary-100 group-hover:text-primary-600 transition-colors">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-sm font-bold text-zinc-500 group-hover:bg-primary-100 group-hover:text-primary-600 transition-colors">
                   {c.name.charAt(0)}
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-700 group-hover:text-primary-700">
+                  <p className="text-sm font-medium text-zinc-900 group-hover:text-primary-700 text-pretty">
                     {c.name}
                   </p>
-                  <p className="text-xs text-gray-400">{c.province}</p>
+                  <p className="text-xs text-zinc-400">{c.province}</p>
                 </div>
               </Link>
             ))}
@@ -192,7 +192,7 @@ export default async function CityPage({ params }: Props) {
           <div className="mt-4 text-center">
             <Link
               href="/ciudades"
-              className="text-sm font-semibold text-primary-600 hover:text-primary-800"
+              className="press-scale text-sm font-semibold text-primary-600 hover:text-primary-800"
             >
               Ver todas las ciudades →
             </Link>
@@ -204,16 +204,16 @@ export default async function CityPage({ params }: Props) {
       <section className="mt-10 rounded-2xl bg-gradient-to-r from-primary-50 to-accent-50 border border-primary-100 p-6 sm:p-8">
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
           <div>
-            <h3 className="text-lg font-bold text-gray-900">
+            <h3 className="text-lg font-bold text-zinc-900">
               ¿Vives en {city.name}?
             </h3>
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-sm text-zinc-500 text-pretty">
               Comparte lo que pagaste en tu clínica y ayuda a otros pacientes de {city.name}.
             </p>
           </div>
           <Link
             href="/reportar-precio"
-            className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
+            className="press-scale shrink-0 inline-flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
           >
             Reportar precio
           </Link>

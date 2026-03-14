@@ -30,17 +30,19 @@ export function FAQSection({ items, className = "" }: FAQSectionProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h2 className="text-2xl font-bold text-gray-900">Preguntas frecuentes</h2>
-      <div className="mt-4 divide-y divide-gray-200 rounded-xl border border-gray-200">
+      <h2 className="text-xl font-bold text-zinc-900 text-balance">
+        Preguntas frecuentes
+      </h2>
+      <div className="mt-4 divide-y divide-zinc-100 rounded-2xl border border-zinc-200/60 bg-white shadow-soft overflow-hidden">
         {items.map((item, index) => (
           <div key={index}>
             <button
               onClick={() =>
                 setOpenIndex(openIndex === index ? null : index)
               }
-              className="flex w-full items-center justify-between px-5 py-4 text-left hover:bg-gray-50 transition-colors"
+              className="flex w-full items-center justify-between px-5 py-4 text-left hover:bg-zinc-50/50 transition-colors"
             >
-              <span className="font-medium text-gray-900">
+              <span className="font-medium text-zinc-900 text-pretty pr-4">
                 {item.question}
               </span>
               <svg
@@ -49,7 +51,7 @@ export function FAQSection({ items, className = "" }: FAQSectionProps) {
                 viewBox="0 0 24 24"
                 strokeWidth={2}
                 stroke="currentColor"
-                className={`h-5 w-5 text-gray-400 transition-transform ${
+                className={`h-4 w-4 shrink-0 text-zinc-400 transition-transform duration-200 ${
                   openIndex === index ? "rotate-180" : ""
                 }`}
               >
@@ -57,7 +59,7 @@ export function FAQSection({ items, className = "" }: FAQSectionProps) {
               </svg>
             </button>
             {openIndex === index && (
-              <div className="px-5 pb-4 text-sm text-gray-600 leading-relaxed">
+              <div className="px-5 pb-4 text-sm text-zinc-600 leading-relaxed text-pretty">
                 {item.answer}
               </div>
             )}

@@ -6,12 +6,13 @@ type Size = "sm" | "md" | "lg";
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    "bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500",
+    "bg-zinc-900 text-white hover:bg-zinc-800 focus-visible:ring-zinc-500",
   secondary:
-    "bg-accent-600 text-white hover:bg-accent-700 focus:ring-accent-500",
+    "bg-primary-600 text-white hover:bg-primary-700 focus-visible:ring-primary-500",
   outline:
-    "border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-primary-500",
-  ghost: "text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:ring-gray-500",
+    "border border-zinc-200 text-zinc-700 hover:bg-zinc-50 hover:border-zinc-300 focus-visible:ring-zinc-500",
+  ghost:
+    "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 focus-visible:ring-zinc-500",
 };
 
 const sizeClasses: Record<Size, string> = {
@@ -40,7 +41,7 @@ export function Button({
   className = "",
   ...props
 }: ButtonProps) {
-  const classes = `inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
+  const classes = `inline-flex items-center justify-center rounded-xl font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none press-scale ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
 
   if ("href" in props && props.href) {
     const { href, ...rest } = props as ButtonAsLink;
