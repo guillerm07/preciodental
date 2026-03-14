@@ -3,13 +3,14 @@ export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { TreatmentSearch } from "@/components/TreatmentSearch";
 import { PriceRangeBar } from "@/components/PriceRangeBar";
+import AnimatedCounter from "@/components/AnimatedCounter";
+import SourceTicker from "@/components/SourceTicker";
 import {
   getAllTreatments,
   getAllCities,
   getTreatmentsWithNationalPrices,
   getGlobalStats,
 } from "@/lib/data/queries";
-import { TREATMENT_CATEGORY_LABELS, type TreatmentCategory } from "@/types";
 import { formatPrice } from "@/lib/utils/format";
 
 export default async function HomePage() {
@@ -20,48 +21,57 @@ export default async function HomePage() {
     getGlobalStats(),
   ]);
 
-  // Group by category
-  const byCategory: Record<string, typeof treatmentsWithPrices> = {};
-  for (const t of treatmentsWithPrices) {
-    if (!byCategory[t.category]) byCategory[t.category] = [];
-    byCategory[t.category].push(t);
-  }
+  const topCities = cities.slice(0, 12);
 
-  // Hero treatments — the ones everyone searches for
-  const heroSlugs = ["implante-dental", "ortodoncia-invisible", "blanqueamiento-dental", "limpieza-dental"];
-  const heroTreatments = heroSlugs
-    .map((slug) => treatmentsWithPrices.find((t) => t.treatmentSlug === slug))
-    .filter(Boolean) as typeof treatmentsWithPrices;
+  const popularSlugs = [
+    "implante-dental",
+    "ortodoncia-invisible",
+    "blanqueamiento-dental",
+    "brackets-metalicos",
+    "carillas-de-porcelana",
+  ];
 
-  const topCities = cities.slice(0, 8);
+  const popularLinks = popularSlugs
+    .map((slug) => {
+      const t = treatmentsWithPrices.find((t) => t.treatmentSlug === slug);
+      if (!t) return null;
+      return { slug: t.treatmentSlug, name: t.treatmentName };
+    })
+    .filter(Boolean) as { slug: string; name: string }[];
+
+  const topTreatments = treatmentsWithPrices.slice(0, 6);
 
   return (
     <>
-      {/* Hero — left-aligned, asymmetric */}
-      <section className="relative min-h-[100dvh] flex items-center overflow-hidden">
-        {/* Subtle background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-zinc-50 via-white to-primary-50/30" />
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary-50/40 to-transparent" />
+      {/* ── Hero ── */}
+      <section className="relative overflow-hidden">
+        <div
+          className="absolute inset-0 bg-grid-dots opacity-40"
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white" />
 
-        <div className="relative mx-auto max-w-7xl w-full px-4 py-20 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-center">
-            {/* Left — copy + search */}
-            <div className="lg:col-span-3">
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary-50 border border-primary-100 px-3 py-1 text-xs font-medium text-primary-700">
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary-500 animate-pulse" />
-                {stats.prices}+ precios verificados — marzo 2026
-              </div>
-
-              <h1 className="mt-6 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl text-balance" style={{ lineHeight: "1.08" }}>
-                ¿Cuánto cuesta tu tratamiento dental?
+        <div className="relative mx-auto max-w-7xl w-full px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:py-40">
+          <div className="grid lg:grid-cols-5 gap-12 lg:gap-20 items-center">
+            {/* Left -- copy + search */}
+            <div className="lg:col-span-3 fade-in-up">
+              <h1
+                className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl text-balance"
+                style={{ lineHeight: "1.08" }}
+              >
+                Compara precios dentales en España
               </h1>
 
               <p className="mt-5 text-lg text-zinc-500 max-w-xl text-pretty leading-relaxed">
-                Precios reales de aseguradoras, cadenas y clínicas en {stats.cities} ciudades de España. Sin registro, sin compromisos.
+                Datos reales de aseguradoras, cadenas y clínicas en{" "}
+                <span className="font-medium text-zinc-700">
+                  {stats.cities} ciudades
+                </span>
+                .
               </p>
 
               {/* Search */}
-              <div className="mt-8">
+              <div className="mt-10">
                 <TreatmentSearch
                   treatments={treatments.map((t) => ({
                     name: t.name,
@@ -72,108 +82,110 @@ export default async function HomePage() {
                 />
               </div>
 
-              {/* Trust line */}
-              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-zinc-400">
-                <span className="tabular-nums">{stats.treatments} tratamientos</span>
-                <span className="h-1 w-1 rounded-full bg-zinc-300" />
-                <span className="tabular-nums">{stats.sources} fuentes de datos</span>
-                <span className="h-1 w-1 rounded-full bg-zinc-300" />
-                <span>Datos públicos y verificables</span>
+              {/* Popular searches */}
+              <div className="mt-5 flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm">
+                <span className="text-zinc-400">Lo más buscado:</span>
+                {popularLinks.map((link, i) => (
+                  <span key={link.slug} className="flex items-center gap-2">
+                    <Link
+                      href={`/tratamientos/${link.slug}`}
+                      className="text-zinc-600 hover:text-primary-700 underline underline-offset-2 decoration-zinc-300 hover:decoration-primary-400 transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                    {i < popularLinks.length - 1 && (
+                      <span className="h-1 w-1 rounded-full bg-zinc-300" />
+                    )}
+                  </span>
+                ))}
               </div>
             </div>
 
-            {/* Right — instant price answers */}
-            <div className="lg:col-span-2 space-y-3">
-              {heroTreatments.slice(0, 4).map((t) => (
-                <Link
-                  key={t.treatmentSlug}
-                  href={`/tratamientos/${t.treatmentSlug}`}
-                  className="group block rounded-2xl border border-zinc-200/60 bg-white p-5 shadow-soft hover:shadow-elevated hover:border-zinc-300/60 transition-all duration-200 press-scale"
-                >
-                  <div className="flex items-baseline justify-between gap-3">
-                    <span className="text-sm font-medium text-zinc-500 group-hover:text-zinc-700 transition-colors">
-                      {t.treatmentName}
-                    </span>
-                    <span className="text-lg font-bold text-zinc-900 tabular-nums">
-                      {formatPrice(Math.round(Number(t.avg)))}
-                    </span>
+            {/* Right -- stats counters */}
+            <div className="lg:col-span-2 fade-in-up" style={{ animationDelay: "150ms" }}>
+              <div className="space-y-6">
+                <div className="rounded-2xl border border-zinc-200/60 bg-white/80 backdrop-blur-sm p-6 shadow-soft">
+                  <AnimatedCounter target={stats.prices} suffix="+" />
+                  <p className="mt-1 text-sm text-zinc-500">precios verificados</p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="rounded-2xl border border-zinc-200/60 bg-white/80 backdrop-blur-sm p-6 shadow-soft">
+                    <AnimatedCounter target={stats.sources} />
+                    <p className="mt-1 text-sm text-zinc-500">fuentes de datos</p>
                   </div>
-                  <div className="mt-3">
-                    <PriceRangeBar
-                      min={Number(t.min)}
-                      max={Number(t.max)}
-                      avg={Math.round(Number(t.avg))}
-                      size="sm"
-                    />
+                  <div className="rounded-2xl border border-zinc-200/60 bg-white/80 backdrop-blur-sm p-6 shadow-soft">
+                    <AnimatedCounter target={stats.cities} />
+                    <p className="mt-1 text-sm text-zinc-500">ciudades</p>
                   </div>
-                  <div className="mt-2 flex items-center justify-between text-xs">
-                    <span className="text-primary-600 tabular-nums">{formatPrice(Number(t.min))}</span>
-                    <span className="text-zinc-400">{Number(t.count)} fuentes</span>
-                    <span className="text-zinc-500 tabular-nums">{formatPrice(Number(t.max))}</span>
-                  </div>
-                </Link>
-              ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Treatments by category — asymmetric 2-col layout */}
+      {/* ── Source Ticker ── */}
+      <section className="bg-zinc-50 border-y border-zinc-100">
+        <SourceTicker
+          sources={[
+            "Sanitas",
+            "Adeslas",
+            "Cigna",
+            "Vitaldent",
+            "Caser",
+            "Generali",
+            "AXA",
+            "Mapfre",
+          ]}
+        />
+      </section>
+
+      {/* ── Popular Treatments ── */}
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
           <h2 className="text-3xl font-bold tracking-tight text-zinc-900 text-balance">
-            Precios de tratamientos dentales en España
+            Tratamientos más consultados
           </h2>
           <p className="mt-3 text-zinc-500 text-pretty">
-            Rango de precios actualizado con datos de {stats.sources} fuentes verificadas.
-            Toca cualquier tratamiento para ver el desglose completo.
+            Rango de precios actualizado con datos de {stats.sources} fuentes
+            verificadas.
           </p>
         </div>
 
-        <div className="mt-12 space-y-12">
-          {Object.entries(byCategory)
-            .slice(0, 6)
-            .map(([category, catTreatments]) => (
-            <div key={category}>
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-                {TREATMENT_CATEGORY_LABELS[category as TreatmentCategory] || category}
-              </h3>
-              <div className="mt-4 divide-y divide-zinc-100">
-                {catTreatments.map((t) => (
-                  <Link
-                    key={t.treatmentSlug}
-                    href={`/tratamientos/${t.treatmentSlug}`}
-                    className="group flex items-center gap-6 py-4 hover:bg-zinc-50/50 -mx-4 px-4 rounded-xl transition-colors"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-zinc-900 group-hover:text-primary-700 transition-colors">
-                        {t.treatmentName}
-                      </p>
-                      <p className="mt-0.5 text-sm text-zinc-400 tabular-nums">
-                        {formatPrice(Number(t.min))} — {formatPrice(Number(t.max))}
-                      </p>
-                    </div>
-                    <div className="hidden sm:block w-32">
-                      <PriceRangeBar
-                        min={Number(t.min)}
-                        max={Number(t.max)}
-                        avg={Math.round(Number(t.avg))}
-                        size="sm"
-                      />
-                    </div>
-                    <div className="text-right shrink-0 w-24">
-                      <p className="text-lg font-bold text-zinc-900 tabular-nums">
-                        {formatPrice(Math.round(Number(t.avg)))}
-                      </p>
-                      <p className="text-xs text-zinc-400">media</p>
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-4 w-4 text-zinc-300 group-hover:text-zinc-500 group-hover:translate-x-0.5 transition-all shrink-0">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                    </svg>
-                  </Link>
-                ))}
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {topTreatments.map((t) => (
+            <Link
+              key={t.treatmentSlug}
+              href={`/tratamientos/${t.treatmentSlug}`}
+              className="group rounded-2xl border border-zinc-200/60 bg-white p-6 shadow-soft hover:shadow-elevated hover:border-zinc-300/60 transition-all duration-200 press-scale"
+            >
+              <p className="text-sm font-medium text-zinc-500 group-hover:text-zinc-700 transition-colors">
+                {t.treatmentName}
+              </p>
+              <p className="mt-2 text-3xl font-bold text-zinc-900 tabular-nums">
+                {formatPrice(Math.round(Number(t.avg)))}
+              </p>
+              <p className="mt-0.5 text-xs text-zinc-400">precio medio</p>
+              <div className="mt-4">
+                <PriceRangeBar
+                  min={Number(t.min)}
+                  max={Number(t.max)}
+                  avg={Math.round(Number(t.avg))}
+                  size="sm"
+                />
               </div>
-            </div>
+              <div className="mt-2 flex items-center justify-between text-xs">
+                <span className="text-primary-600 tabular-nums">
+                  {formatPrice(Number(t.min))}
+                </span>
+                <span className="text-zinc-400">
+                  {Number(t.count)} fuentes
+                </span>
+                <span className="text-zinc-500 tabular-nums">
+                  {formatPrice(Number(t.max))}
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
 
@@ -183,14 +195,25 @@ export default async function HomePage() {
             className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-6 py-3 text-sm font-medium text-white hover:bg-zinc-800 transition-all press-scale"
           >
             Ver los {treatmentsWithPrices.length} tratamientos
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-4 w-4">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="h-4 w-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+              />
             </svg>
           </Link>
         </div>
       </section>
 
-      {/* Insurance savings — asymmetric with accent */}
+      {/* ── Insurance Savings ── */}
       <section className="border-t border-zinc-100">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -211,8 +234,19 @@ export default async function HomePage() {
                 className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-zinc-900 hover:text-primary-700 transition-colors"
               >
                 Comparar aseguradoras
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-4 w-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="h-4 w-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+                  />
                 </svg>
               </Link>
             </div>
@@ -224,19 +258,23 @@ export default async function HomePage() {
                 { name: "Corona de zirconio", without: 500, with: 295 },
                 { name: "Endodoncia", without: 250, with: 128 },
               ].map((item) => {
-                const savings = Math.round(((item.without - item.with) / item.without) * 100);
+                const savings = Math.round(
+                  ((item.without - item.with) / item.without) * 100
+                );
                 return (
                   <div
                     key={item.name}
                     className="rounded-2xl border border-zinc-200/60 bg-white p-5 shadow-soft"
                   >
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-zinc-500">{item.name}</p>
+                      <p className="text-sm font-medium text-zinc-500">
+                        {item.name}
+                      </p>
                       <span className="rounded-full bg-primary-50 px-2.5 py-0.5 text-xs font-semibold text-primary-700">
                         -{savings}%
                       </span>
                     </div>
-                    <div className="mt-2 flex items-baseline gap-3">
+                    <div className="mt-3 flex items-baseline gap-3">
                       <span className="text-xl font-bold text-zinc-900 tabular-nums">
                         {formatPrice(item.with)}
                       </span>
@@ -255,7 +293,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Cities */}
+      {/* ── Cities ── */}
       <section className="border-t border-zinc-100 bg-zinc-50/50">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between">
@@ -264,17 +302,28 @@ export default async function HomePage() {
                 Precios por ciudad
               </h2>
               <p className="mt-2 text-zinc-500">
-                Los precios varían según la zona geográfica. Las ciudades de
-                Zona A suelen ser más baratas.
+                Los precios varían según la zona geográfica. Las ciudades de Zona
+                A suelen ser más baratas.
               </p>
             </div>
             <Link
               href="/ciudades"
               className="hidden sm:flex items-center gap-1 text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors"
             >
-              Ver {cities.length} ciudades
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-4 w-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              Ver las {cities.length} ciudades
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="h-4 w-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                />
               </svg>
             </Link>
           </div>
@@ -293,15 +342,15 @@ export default async function HomePage() {
                   <p className="font-medium text-zinc-900 group-hover:text-primary-700 transition-colors">
                     {city.name}
                   </p>
-                  <p className="text-xs text-zinc-400">
-                    {city.community}
-                  </p>
+                  <p className="text-xs text-zinc-400">{city.community}</p>
                 </div>
-                <span className={`ml-auto shrink-0 inline-flex h-6 w-6 items-center justify-center rounded-md text-xs font-semibold ${
-                  city.zone === "A"
-                    ? "bg-primary-50 text-primary-700"
-                    : "bg-zinc-100 text-zinc-500"
-                }`}>
+                <span
+                  className={`ml-auto shrink-0 inline-flex h-6 w-6 items-center justify-center rounded-md text-xs font-semibold ${
+                    city.zone === "A"
+                      ? "bg-primary-50 text-primary-700"
+                      : "bg-zinc-100 text-zinc-500"
+                  }`}
+                >
                   {city.zone}
                 </span>
               </Link>
@@ -319,94 +368,38 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* How it works — data sources */}
+      {/* ── CTA (dark) ── */}
       <section className="border-t border-zinc-100">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl font-bold tracking-tight text-zinc-900 text-balance">
-              ¿De dónde vienen los datos?
-            </h2>
-            <p className="mt-3 text-zinc-500 text-pretty">
-              Transparencia total. Todos nuestros datos provienen de fuentes públicas y verificables.
-            </p>
-          </div>
+        <div className="bg-zinc-900 relative overflow-hidden">
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle, #ffffff 1px, transparent 1px)",
+              backgroundSize: "32px 32px",
+            }}
+            aria-hidden="true"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-800" />
 
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {[
-              {
-                title: "PDFs de aseguradoras",
-                description:
-                  "Descargamos y analizamos los baremos oficiales de Sanitas, Adeslas, Cigna y otras aseguradoras con IA.",
-                detail: "Baremos 2025-2026",
-              },
-              {
-                title: "Webs de cadenas y clínicas",
-                description:
-                  "Recopilamos precios públicos de Vitaldent, Dentix, y clínicas que publican tarifas online.",
-                detail: "Actualización trimestral",
-              },
-              {
-                title: "Precios de pacientes",
-                description:
-                  "Los usuarios reportan lo que pagaron en su ciudad. Cada dato se verifica antes de publicarse.",
-                detail: "Datos anónimos",
-              },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="group rounded-2xl border border-zinc-200/60 bg-white p-6 shadow-soft transition-all hover:shadow-elevated"
-              >
-                <p className="text-xs font-medium uppercase tracking-wider text-zinc-400">
-                  {item.detail}
-                </p>
-                <h3 className="mt-3 text-base font-semibold text-zinc-900">
-                  {item.title}
-                </h3>
-                <p className="mt-2 text-sm text-zinc-500 leading-relaxed text-pretty">
-                  {item.description}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8">
-            <Link
-              href="/metodologia"
-              className="inline-flex items-center gap-2 text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors"
-            >
-              Leer nuestra metodología completa
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-4 w-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="border-t border-zinc-100 bg-zinc-50/50">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="rounded-3xl bg-zinc-900 p-8 sm:p-12 lg:p-16">
-            <div className="grid lg:grid-cols-2 gap-8 items-center">
-              <div>
-                <h2 className="text-2xl font-bold text-white sm:text-3xl text-balance">
-                  ¿Has ido al dentista recientemente?
-                </h2>
-                <p className="mt-3 text-zinc-400 text-pretty leading-relaxed">
-                  Comparte lo que pagaste de forma anónima y ayuda a otros pacientes
-                  a conocer precios reales en su ciudad.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
+          <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-2xl font-bold text-white sm:text-3xl text-balance">
+                ¿Has ido al dentista recientemente?
+              </h2>
+              <p className="mt-4 text-zinc-400 text-pretty leading-relaxed">
+                Comparte tu precio de forma anónima y ayuda a miles de pacientes
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
                 <Link
                   href="/reportar-precio"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-zinc-900 hover:bg-zinc-100 transition-colors press-scale"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-500 px-6 py-3 text-sm font-semibold text-white hover:bg-primary-600 transition-colors press-scale"
                 >
                   Reportar mi precio
                 </Link>
                 <Link
                   href="/comparar"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-700 px-6 py-3 text-sm font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors press-scale"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-600 px-6 py-3 text-sm font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors press-scale"
                 >
                   Comparar tratamientos
                 </Link>
@@ -416,7 +409,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Disclaimer */}
+      {/* ── Disclaimer ── */}
       <section className="border-t border-zinc-100 px-4 py-8 sm:px-6">
         <p className="mx-auto max-w-4xl text-center text-xs text-zinc-400 leading-relaxed text-pretty">
           Los precios mostrados son orientativos y están basados en datos

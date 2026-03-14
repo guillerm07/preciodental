@@ -122,3 +122,39 @@ body {
 .prose td, .prose th {
   @apply border border-zinc-200 px-3 py-2;
 }
+
+/* Dot grid background for hero */
+.bg-grid-dots {
+  background-image: radial-gradient(circle, #e4e4e7 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Source ticker scroll animation */
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-ticker {
+  animation: ticker 20s linear infinite;
+}
+
+/* Subtle entrance animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out both;
+}

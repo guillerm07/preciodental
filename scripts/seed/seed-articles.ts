@@ -1,7 +1,6 @@
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { eq } from "drizzle-orm";
 import * as schema from "../../src/lib/db/schema";
 
 const connectionString =
@@ -11,877 +10,695 @@ const connectionString =
 const client = postgres(connectionString, { max: 1 });
 const db = drizzle(client, { schema });
 
-// ── Article data ────────────────────────────────────────────────────────────────
-
-interface ArticleData {
+const ARTICLES: Array<{
   title: string;
   slug: string;
-  content: string;
   excerpt: string;
   metaTitle: string;
   metaDescription: string;
   targetKeywords: string[];
-}
-
-const ARTICLES: ArticleData[] = [
-  // ── Article 1: Implante dental ──────────────────────────────────────────────
+  content: string;
+  publishedAt: string;
+}> = [
+  // ── Article 1: Implantes dentales ───────────────────────────────────────────
   {
     title: "¿Cuánto cuesta un implante dental en España en 2026?",
     slug: "cuanto-cuesta-implante-dental-espana",
     excerpt:
-      "Descubre los precios reales de un implante dental en España en 2026: desde 380 € solo el tornillo hasta 1.800 € con corona incluida. Analizamos qué incluye cada presupuesto, factores que influyen en el precio y cómo ahorrar.",
-    metaTitle: "¿Cuánto cuesta un implante dental en España en 2026? Precios reales",
+      "Descubre los precios actualizados de implantes dentales en España en 2026. Comparamos tipos, zonas geográficas, seguros y opciones de financiación para que tomes la mejor decisión.",
+    metaTitle: "Precio implante dental en España 2026 | Guía completa",
     metaDescription:
-      "Precios actualizados de implantes dentales en España: de 380 € a 1.800 € según clínica y ciudad. Comparamos aseguradoras, cadenas y clínicas privadas.",
+      "¿Cuánto cuesta un implante dental en España en 2026? Precios desde 380€ hasta 1.800€ según tipo y zona. Comparativa con y sin seguro dental.",
     targetKeywords: [
-      "cuánto cuesta un implante dental",
       "precio implante dental",
+      "cuanto cuesta implante dental",
       "implante dental precio españa",
+      "implante dental barato",
     ],
-    content: `## ¿Cuánto cuesta realmente un implante dental en España?
+    publishedAt: "2026-03-02",
+    content: `<p>El implante dental es uno de los tratamientos más demandados en odontología y, al mismo tiempo, uno de los que generan más dudas por su coste. Si estás valorando ponerte un implante, es fundamental que conozcas los factores que influyen en el precio y las opciones disponibles para que puedas tomar una decisión informada.</p>
 
-Si estás valorando ponerte un implante dental, lo primero que necesitas saber es que **no existe un precio único**. El coste varía enormemente según lo que incluya el presupuesto, la ciudad donde te trates y el tipo de clínica que elijas.
+<h2>¿Qué es un implante dental y por qué varía tanto su precio?</h2>
 
-En 2026, el precio de un implante dental en España se mueve en estas horquillas:
+<p>Un implante dental es un tornillo de titanio o circonio que se inserta en el hueso maxilar para sustituir la raíz de un diente perdido. Sobre él se coloca una corona que imita la apariencia y función del diente natural. El precio final depende de múltiples factores: el material del implante, la marca utilizada, la complejidad del caso y la ubicación geográfica de la clínica.</p>
 
-- **Solo el implante (tornillo de titanio):** entre 380 € y 780 €
-- **Implante completo con corona:** entre 900 € y 1.800 €
-- **Rehabilitación All-on-4 (arcada completa):** entre 5.780 € y 10.500 €
+<p>En España, el precio de un implante dental (solo la pieza, sin corona) oscila entre <strong>380 € y 780 €</strong> en 2026. Si hablamos del implante completo, incluyendo la corona y el pilar, el rango se amplía a <strong>900 € y 1.800 €</strong>. Esta horquilla puede parecer amplia, pero se explica por las diferencias que detallamos a continuación.</p>
 
-Estas cifras reflejan el mercado real. Pero cuidado: muchas clínicas anuncian precios que solo incluyen el tornillo, sin la corona ni la cirugía. Antes de comparar, asegúrate de que estás comparando lo mismo.
+<h2>Tipos de implantes y sus precios</h2>
 
-## ¿Qué incluye el precio de un implante dental?
+<h3>Implante de titanio</h3>
+<p>Es el tipo más habitual y con mayor evidencia clínica. Las marcas premium como Straumann, Nobel Biocare o Zimmer Biomet suelen costar más que las marcas nacionales o genéricas, pero ofrecen tasas de éxito superiores al 97% a diez años. Un implante de titanio de gama alta con corona de circonio puede alcanzar los 1.500-1.800 €.</p>
 
-Un tratamiento de implante dental completo consta de varias fases, y cada una tiene su coste:
+<h3>Implante de circonio</h3>
+<p>Fabricado en óxido de circonio, es una alternativa para pacientes con alergias al titanio o que buscan una estética superior (el color blanco evita que se transparente en encías finas). Su precio suele ser un 15-25% superior al de titanio.</p>
 
-### 1. Diagnóstico previo
+<h3>Mini-implantes</h3>
+<p>Son implantes de diámetro reducido que se utilizan principalmente para estabilizar prótesis removibles. Su coste es sensiblemente menor, entre 250 € y 500 € por unidad, aunque sus indicaciones son más limitadas.</p>
 
-- **Radiografía panorámica:** entre 0 € y 100 € (muchas clínicas la incluyen gratis en la primera visita)
-- **TAC dental (CBCT):** entre 100 € y 120 €
-- **Estudio implantológico:** puede estar incluido o costar entre 50 € y 150 €
+<h2>Precio por zonas geográficas</h2>
 
-### 2. Cirugía de colocación del implante
+<p>El coste de la vida y la densidad de oferta dental afectan directamente al precio de los implantes. En España se distinguen habitualmente dos zonas:</p>
 
-Es la intervención donde se inserta el tornillo de titanio en el hueso maxilar. Incluye la anestesia local, el propio implante y los materiales quirúrgicos. Este es el componente que la mayoría de clínicas anuncia como "precio del implante": **entre 380 € y 780 €**.
+<ul>
+<li><strong>Zona A (grandes ciudades y costa):</strong> Barcelona, Madrid, Bilbao, Palma de Mallorca y San Sebastián presentan los precios más altos. Un implante completo en Barcelona puede costar entre 1.000 € y 2.000 €.</li>
+<li><strong>Zona B (interior y ciudades medianas):</strong> Ciudades como Sevilla, Valencia, Murcia o Granada ofrecen precios más competitivos, con implantes completos desde 850 € hasta 1.500 €.</li>
+</ul>
 
-### 3. Pilar y corona protésica
+<p>Puedes consultar los precios actualizados por ciudad en nuestra <a href="/tratamientos/implante-dental">sección de implantes dentales</a>, donde comparamos datos de aseguradoras, cadenas y clínicas independientes.</p>
 
-Una vez que el implante se ha osteointegrado (normalmente entre 3 y 6 meses), se coloca la corona definitiva. La **corona sobre implante** tiene un coste de entre 450 € y 665 €, dependiendo del material:
+<h2>¿Qué incluye el precio de un implante?</h2>
 
-- **Metal-porcelana:** opción más económica, entre 290 € y 440 €
-- **Circonio:** más estética y resistente, entre 399 € y 520 €
+<p>Un presupuesto transparente de implante dental debería desglosar los siguientes conceptos:</p>
 
-### 4. Procedimientos adicionales (si son necesarios)
+<ul>
+<li><strong>Estudio previo:</strong> radiografía panorámica o TAC dental (50-120 €).</li>
+<li><strong>Cirugía de colocación:</strong> incluye la pieza del implante, la anestesia local y el acto quirúrgico.</li>
+<li><strong>Pilar o abutment:</strong> la pieza intermedia que conecta el implante con la corona.</li>
+<li><strong>Corona protésica:</strong> puede ser de metal-porcelana (más económica) o de circonio (más estética).</li>
+<li><strong>Revisiones postoperatorias:</strong> normalmente incluidas en el precio global.</li>
+</ul>
 
-No todos los pacientes necesitan estos pasos, pero si el hueso no es suficiente, hay que regenerarlo:
+<p>Desconfía de presupuestos que no detallen cada partida o que ofrezcan precios excesivamente bajos sin explicar qué marca de implante utilizan.</p>
 
-- **Elevación de seno maxilar:** entre 360 € y 900 €
-- **Injerto óseo:** entre 300 € y 800 €
-- **Regeneración ósea guiada:** entre 250 € y 600 €
+<h2>Implantes con seguro dental vs. sin seguro</h2>
 
-Estos procedimientos pueden duplicar el coste total del tratamiento.
+<p>La mayoría de seguros dentales en España no cubren implantes en sus pólizas básicas, pero sí ofrecen tarifas reducidas a través de su cuadro de clínicas concertadas. Veamos las diferencias:</p>
 
-## Factores que afectan al precio del implante dental
+<ul>
+<li><strong>Sin seguro:</strong> precio de mercado libre. Puedes negociar y comparar entre clínicas, pero el coste total suele ser mayor.</li>
+<li><strong>Con seguro dental:</strong> aseguradoras como Sanitas, Adeslas o Cigna ofrecen implantes a precios entre un 15% y un 30% inferiores al mercado libre. Por ejemplo, un implante completo que costaría 1.500 € sin seguro puede salir por 1.050-1.275 € con póliza dental.</li>
+</ul>
 
-### La ciudad importa (y mucho)
+<p>Ten en cuenta que las pólizas dentales tienen un coste mensual de entre 8 € y 30 € y suelen incluir períodos de carencia de 3 a 6 meses para implantes. Haz números para ver si el ahorro compensa el coste acumulado de la prima.</p>
 
-Barcelona y Madrid son las ciudades más caras. Un implante completo en Barcelona puede costar un 12 % más que la media nacional, mientras que en ciudades como Murcia o Sevilla los precios son entre un 8 % y un 10 % más bajos.
+<h2>Opciones de financiación</h2>
 
-| Ciudad | Precio medio implante completo |
-|--------|-------------------------------|
-| Barcelona | 1.700 € |
-| Madrid | 1.630 € |
-| Bilbao | 1.670 € |
-| Valencia | 1.470 € |
-| Sevilla | 1.420 € |
-| Murcia | 1.395 € |
+<p>Dado que el implante dental supone una inversión considerable, muchas clínicas y aseguradoras ofrecen planes de financiación:</p>
 
-### Tipo de clínica
+<ul>
+<li><strong>Financiación sin intereses:</strong> habitual en plazos de 6 a 12 meses. Es la opción más recomendable si puedes asumir las cuotas mensuales.</li>
+<li><strong>Financiación a largo plazo:</strong> hasta 24 o 36 meses, normalmente con un interés del 6-10% TAE. Úsala con precaución y compara la TAE real.</li>
+<li><strong>Pago por fases:</strong> algunas clínicas permiten fraccionar el pago según las etapas del tratamiento (cirugía, osteointegración, corona), lo que distribuye el gasto a lo largo de 4-6 meses de forma natural.</li>
+</ul>
 
-- **Cadenas dentales** (Vitaldent, Dentix): precios competitivos, financiación agresiva. Implante completo desde 1.200 €.
-- **Clínicas privadas medianas:** mayor personalización. Entre 1.400 € y 1.800 €.
-- **Especialistas en implantología:** pueden superar los 2.000 €, pero con tecnología avanzada y mayor experiencia.
+<h2>Consejos para ahorrar en tu implante dental</h2>
 
-### Material del implante
+<ul>
+<li>Pide al menos tres presupuestos detallados antes de decidir.</li>
+<li>Pregunta siempre qué marca y modelo de implante utilizan.</li>
+<li>Compara precios entre zonas geográficas: un desplazamiento puede suponer un ahorro de varios cientos de euros.</li>
+<li>Valora si un seguro dental con carencia ya superada te permite acceder a tarifas reducidas.</li>
+<li>Consulta los precios actualizados en nuestra sección de tratamientos para tener una referencia fiable antes de acudir a consulta.</li>
+</ul>
 
-La gran mayoría de implantes en España son de **titanio grado IV o V**. Los implantes de **circonio** (sin metal) son más recientes y suelen costar un 20-30 % más. Las marcas también influyen: Straumann o Nobel Biocare son más caras que marcas nacionales como Klockner o BTI.
+<h2>Conclusión</h2>
 
-## ¿Cuánto cuesta un implante dental con seguro?
-
-Las aseguradoras dentales no suelen cubrir implantes en sus pólizas básicas, pero sí ofrecen precios reducidos a través de sus cuadros médicos:
-
-- **Sanitas Dental:** implante (solo tornillo) desde 323 €
-- **Adeslas Dental:** implante desde 334 €
-- **Cigna Healthcare:** implante desde 342 €
-
-Estas tarifas representan un ahorro de entre un 15 % y un 25 % respecto al precio de mercado. El coste mensual de un seguro dental está entre 8 € y 25 €, por lo que si necesitas un implante, el ahorro compensa con creces la prima anual.
-
-## Financiación de implantes dentales
-
-La mayoría de clínicas en España ofrecen financiación para implantes. Las condiciones más habituales son:
-
-- **Financiación sin intereses:** entre 6 y 12 meses, disponible en la mayoría de cadenas
-- **Financiación a largo plazo:** hasta 36 o 60 meses, con intereses del 7-12 % TAE
-- **Pago por fases:** pagas cada etapa del tratamiento por separado (diagnóstico, cirugía, corona)
-
-Un consejo: la financiación "sin intereses" a veces lleva aparejada una comisión de apertura. Pregunta siempre por el coste total final.
-
-## ¿Cuándo merece la pena viajar a otra ciudad para un implante?
-
-Si vives en Barcelona o Madrid y necesitas varios implantes, el ahorro de tratarte en una ciudad más económica puede compensar el desplazamiento. Por ejemplo, la diferencia entre Barcelona y Sevilla para un tratamiento All-on-4 puede superar los 1.500 €.
-
-Eso sí, recuerda que el tratamiento de implantes requiere varias visitas a lo largo de meses, así que el ahorro tiene que compensar los viajes.
-
-## Conclusión: ¿cuánto vas a pagar por tu implante?
-
-Para un implante dental unitario completo en España en 2026, prepara un presupuesto de **entre 900 € y 1.800 €**. Si necesitas regeneración ósea o elevación de seno, la cifra puede subir hasta 2.500 €.
-
-Nuestro consejo: pide al menos tres presupuestos, asegúrate de que todos incluyen lo mismo (diagnóstico, cirugía, corona y revisiones) y compara con los precios de aseguradoras. Y recuerda que el implante más barato no siempre es el mejor: la experiencia del cirujano y la calidad del material son factores que afectan directamente al resultado a largo plazo.`,
+<p>El precio de un implante dental en España en 2026 se sitúa entre 900 € y 1.800 € para el tratamiento completo, dependiendo de la marca, el material de la corona y la ubicación de la clínica. Invertir en un implante de calidad con un profesional experimentado es una de las mejores decisiones para tu salud bucal a largo plazo. No te dejes guiar únicamente por el precio más bajo: la calidad de los materiales y la experiencia del implantólogo son factores decisivos para el éxito del tratamiento.</p>`,
   },
 
-  // ── Article 2: Ortodoncia invisible vs brackets ─────────────────────────────
+  // ── Article 2: Ortodoncia ─────────────────────────────────────────────────
   {
-    title: "Ortodoncia invisible vs brackets: precio y diferencias",
-    slug: "ortodoncia-invisible-vs-brackets-precio-diferencias",
+    title: "Ortodoncia invisible vs brackets: precio y comparativa completa",
+    slug: "ortodoncia-invisible-vs-brackets-precio-comparativa",
     excerpt:
-      "Comparativa completa entre ortodoncia invisible e Invisalign frente a brackets metálicos y de zafiro: precios en España en 2026, duración del tratamiento, ventajas y desventajas de cada sistema.",
-    metaTitle: "Ortodoncia invisible vs brackets: precios y diferencias en 2026",
+      "Comparativa detallada entre ortodoncia invisible y brackets en 2026: precios, duración, comodidad y resultados. Te ayudamos a elegir el tratamiento que mejor se adapta a ti.",
+    metaTitle:
+      "Ortodoncia invisible vs brackets: precios 2026 y comparativa",
     metaDescription:
-      "Brackets desde 2.400 € vs Invisalign desde 3.500 €. Comparamos precio, duración, comodidad y resultados de cada tipo de ortodoncia en España.",
+      "Brackets metálicos desde 2.400€, de zafiro desde 3.300€ e Invisalign desde 3.500€. Comparamos precio, duración, comodidad y resultados de cada tipo de ortodoncia.",
     targetKeywords: [
       "ortodoncia invisible precio",
-      "invisalign precio españa",
       "brackets vs invisalign",
+      "ortodoncia invisible vs brackets",
+      "precio brackets",
     ],
-    content: `## Brackets o alineadores invisibles: la gran decisión
+    publishedAt: "2026-03-05",
+    content: `<p>Elegir entre ortodoncia invisible y brackets tradicionales es una de las decisiones más habituales en la consulta del ortodoncista. Ambos sistemas son eficaces para corregir la posición de los dientes, pero difieren en precio, estética, comodidad y tipo de casos que pueden tratar. En esta guía comparamos todas las opciones disponibles en España en 2026 para que elijas con criterio.</p>
 
-Cada vez más adultos se lanzan a corregir su sonrisa, y la primera pregunta siempre es la misma: ¿brackets o ortodoncia invisible? La respuesta depende de tu caso clínico, tu presupuesto y tus prioridades estéticas. Vamos a desgranar todo lo que necesitas saber para tomar una decisión informada.
+<h2>Tipos de ortodoncia disponibles</h2>
 
-## Precios de ortodoncia en España en 2026
+<h3>Brackets metálicos</h3>
+<p>Son los clásicos brackets de acero inoxidable que se adhieren a la superficie de los dientes y se conectan mediante un arco metálico. Siguen siendo la opción más económica y una de las más versátiles, capaz de resolver maloclusiones severas. Su precio en España oscila entre <strong>2.400 € y 3.380 €</strong> por el tratamiento completo, incluyendo revisiones mensuales y retenedores finales.</p>
 
-Antes de entrar en detalles, estas son las horquillas de precio actuales:
+<h3>Brackets de zafiro</h3>
+<p>Funcionan de la misma manera que los metálicos, pero están fabricados con cristal de zafiro transparente, lo que los hace mucho más discretos. Son resistentes y no se tiñen con el tiempo, a diferencia de los brackets cerámicos convencionales. El coste se sitúa entre <strong>3.300 € y 4.290 €</strong>, es decir, entre un 25% y un 35% más que los metálicos.</p>
 
-| Tipo de ortodoncia | Precio mínimo | Precio máximo | Media |
-|---------------------|---------------|---------------|-------|
-| **Brackets metálicos** | 2.400 € | 3.380 € | 2.700 € |
-| **Brackets de zafiro** | 3.300 € | 4.290 € | 3.600 € |
-| **Ortodoncia invisible (genérica)** | 3.500 € | 5.330 € | 4.200 € |
-| **Invisalign Comprehensive** | 4.450 € | 6.695 € | 5.200 € |
+<h3>Ortodoncia invisible (alineadores)</h3>
+<p>Consiste en una serie de férulas transparentes removibles que se cambian cada una o dos semanas. El sistema más conocido es Invisalign, aunque existen alternativas como Spark o SureSmile. Los alineadores genéricos o de marcas nacionales cuestan entre <strong>3.500 € y 5.330 €</strong>, mientras que Invisalign Comprehensive (casos complejos) puede alcanzar los <strong>4.450 € a 6.695 €</strong>.</p>
 
-A estos precios hay que sumarles los **retenedores** que se colocan al terminar el tratamiento, que cuestan entre 80 € y 200 €.
+<h3>Ortodoncia lingual</h3>
+<p>Los brackets se colocan en la cara interna de los dientes, haciéndolos completamente invisibles desde fuera. Es la opción más cara (desde 5.000 € hasta 9.000 €) y la menos cómoda inicialmente, por lo que se reserva para pacientes que priorizan la estética por encima de todo.</p>
 
-## ¿Qué son los brackets metálicos?
+<h2>Comparativa de precios 2026</h2>
 
-Los brackets metálicos son el sistema ortodóntico clásico. Pequeñas piezas de acero inoxidable se cementan a la superficie de cada diente y se conectan con un arco metálico que ejerce la fuerza necesaria para mover los dientes.
+<ul>
+<li><strong>Brackets metálicos:</strong> 2.400 € - 3.380 €</li>
+<li><strong>Brackets de zafiro:</strong> 3.300 € - 4.290 €</li>
+<li><strong>Alineadores invisibles:</strong> 3.500 € - 5.330 €</li>
+<li><strong>Invisalign Comprehensive:</strong> 4.450 € - 6.695 €</li>
+<li><strong>Ortodoncia lingual:</strong> 5.000 € - 9.000 €</li>
+</ul>
 
-**Ventajas:**
-- Son el sistema más económico
-- Funcionan para prácticamente todos los casos, incluso los más complejos
-- No dependen de la disciplina del paciente (no se quitan)
-- Las citas de ajuste suelen ser más rápidas
+<p>Estos precios suelen incluir el estudio inicial, los aparatos, las revisiones periódicas y los retenedores de mantenimiento. Consulta los precios específicos de cada tratamiento en tu ciudad en nuestra <a href="/tratamientos/ortodoncia-invisible">sección de ortodoncia</a>.</p>
 
-**Desventajas:**
-- Son visibles, lo que preocupa a muchos adultos
-- Pueden causar rozaduras en labios y mejillas durante la adaptación
-- Dificultan la higiene bucal (necesitas cepillos interdentales y más tiempo de limpieza)
-- Restricciones alimentarias: nada de morder manzanas o comer palomitas
+<h2>Duración del tratamiento</h2>
 
-## ¿Qué es la ortodoncia invisible?
+<p>La duración depende de la complejidad del caso más que del sistema elegido. Sin embargo, hay diferencias generales:</p>
 
-Los alineadores transparentes son férulas de plástico médico que se fabrican a medida y se van cambiando cada 1-2 semanas. El paciente recibe una serie de alineadores que mueven los dientes de forma progresiva.
+<ul>
+<li><strong>Brackets metálicos:</strong> 12 a 24 meses. Son especialmente eficientes en movimientos complejos como extrusiones o rotaciones severas.</li>
+<li><strong>Brackets de zafiro:</strong> 12 a 24 meses. Misma eficacia que los metálicos, pero la fricción ligeramente mayor puede añadir uno o dos meses en algunos casos.</li>
+<li><strong>Alineadores invisibles:</strong> 6 a 18 meses para casos leves a moderados. Los casos complejos con Invisalign Comprehensive pueden extenderse hasta 24 meses.</li>
+</ul>
 
-**Invisalign** es la marca más conocida, pero existen alternativas más económicas como Spark, SureSmile o marcas propias de clínicas. Los resultados son comparables en la mayoría de los casos.
+<h2>Ventajas e inconvenientes de cada sistema</h2>
 
-**Ventajas:**
-- Prácticamente invisibles a distancia media
-- Se quitan para comer y cepillarse los dientes
-- Sin restricciones alimentarias
-- Menos urgencias (no se rompen brackets ni se sueltan arcos)
-- Citas de seguimiento más espaciadas
+<h3>Brackets (metálicos y zafiro)</h3>
+<p><strong>Ventajas:</strong></p>
+<ul>
+<li>Eficaces en todo tipo de maloclusiones, incluyendo las más severas.</li>
+<li>No dependen de la colaboración del paciente (no se pueden quitar).</li>
+<li>Precio más accesible, especialmente los metálicos.</li>
+<li>Permiten ajustes precisos en cada revisión mensual.</li>
+</ul>
+<p><strong>Inconvenientes:</strong></p>
+<ul>
+<li>Son visibles (los metálicos más que los de zafiro).</li>
+<li>Pueden causar rozaduras en labios y mejillas las primeras semanas.</li>
+<li>La higiene dental requiere más tiempo y cuidado.</li>
+<li>Restricciones alimentarias: evitar alimentos duros o pegajosos.</li>
+</ul>
 
-**Desventajas:**
-- Requieren disciplina: hay que llevarlos puestos mínimo 22 horas al día
-- Precio más elevado
-- No todos los casos son tratables (maloclusiones severas pueden necesitar brackets)
-- Los ataches (pequeños relieves de composite) pueden ser visibles de cerca
+<h3>Ortodoncia invisible</h3>
+<p><strong>Ventajas:</strong></p>
+<ul>
+<li>Prácticamente invisibles cuando se llevan puestos.</li>
+<li>Removibles: se quitan para comer y cepillarse los dientes.</li>
+<li>Más cómodos: sin alambres ni brackets que irriten las mucosas.</li>
+<li>Menos visitas al ortodoncista (cada 6-8 semanas en lugar de cada 4).</li>
+</ul>
+<p><strong>Inconvenientes:</strong></p>
+<ul>
+<li>Requieren disciplina: hay que llevarlos 20-22 horas al día.</li>
+<li>Menos eficaces en maloclusiones severas o movimientos complejos.</li>
+<li>Precio superior a los brackets convencionales.</li>
+<li>Pueden perderse o romperse si no se cuidan adecuadamente.</li>
+</ul>
 
-## ¿Qué factores afectan al precio de la ortodoncia?
+<h2>¿Cuándo es mejor cada opción?</h2>
 
-### Complejidad del caso
+<p><strong>Elige brackets metálicos si:</strong> buscas la opción más económica, tienes una maloclusión compleja o prefieres un sistema que no dependa de tu disciplina diaria.</p>
 
-Un apiñamiento leve se resuelve en 6-12 meses con un tratamiento sencillo. Una mordida cruzada con apiñamiento severo puede requerir 24-30 meses y múltiples refinamientos. Cuanto más complejo, más caro.
+<p><strong>Elige brackets de zafiro si:</strong> quieres una ortodoncia fija pero más discreta que los metálicos y estás dispuesto a pagar un poco más por la estética.</p>
 
-### Ciudad y tipo de clínica
+<p><strong>Elige ortodoncia invisible si:</strong> priorizas la estética y la comodidad, tienes un caso leve o moderado y eres disciplinado con los horarios de uso.</p>
 
-Las diferencias geográficas son significativas. Un tratamiento Invisalign Comprehensive que cuesta 5.500 € en Barcelona puede encontrarse por 4.200 € en Sevilla o Murcia. Las cadenas dentales suelen ofrecer precios más ajustados que las clínicas boutique.
+<h2>Financiación y seguros</h2>
 
-### Marca del sistema de alineadores
+<p>La mayoría de clínicas ofrecen financiación sin intereses de 12 a 18 meses para tratamientos de ortodoncia. Los seguros dentales como Sanitas o Adeslas incluyen descuentos de entre el 15% y el 25% en ortodoncia a través de su red de clínicas concertadas. Antes de decidir, compara al menos tres presupuestos y verifica qué incluye cada uno: estudio, aparatos, revisiones, retenedores y posibles refinamientos.</p>
 
-Invisalign es la marca premium y sus licencias de software son más caras para los ortodoncistas, lo que repercute en el precio final. Alternativas como Spark o sistemas propios de las clínicas pueden ser un 20-30 % más baratos con resultados equivalentes.
+<h2>Conclusión</h2>
 
-### Experiencia del ortodoncista
-
-Un ortodoncista certificado como Diamond Provider de Invisalign (más de 150 casos al año) cobra más, pero su experiencia reduce el riesgo de refinamientos y alarga menos el tratamiento. En ortodoncia, la mano del profesional importa tanto como el sistema.
-
-## Duración del tratamiento: ¿cuánto tardan?
-
-- **Brackets metálicos:** entre 12 y 30 meses según la complejidad
-- **Brackets de zafiro:** similar a los metálicos, a veces ligeramente más
-- **Alineadores invisibles:** entre 6 y 24 meses, aunque los refinamientos pueden alargar el proceso
-
-Para casos leves de apiñamiento anterior, existen tratamientos express con alineadores (tipo Invisalign Lite o i7) que duran entre 3 y 7 meses y cuestan significativamente menos (entre 2.000 € y 3.000 €).
-
-## ¿Cuánto puedes ahorrar con un seguro dental?
-
-Los seguros dentales no suelen cubrir la ortodoncia al completo, pero sí ofrecen descuentos sustanciales:
-
-- **Sanitas:** descuentos de hasta el 25 % en ortodoncias a través de su cuadro médico
-- **Adeslas:** paquetes de ortodoncia con descuentos del 15-22 %
-- **Cigna:** tarifas preferentes del 20 % de descuento en alineadores
-
-Teniendo en cuenta que la prima mensual ronda los 15-25 €, si ya sabes que vas a necesitar ortodoncia, contratar un seguro antes de empezar puede suponer un ahorro de 600-1.200 €.
-
-## ¿Qué sistema elegir?
-
-La decisión debería basarse en tres factores:
-
-1. **Tu caso clínico:** consulta con un ortodoncista. Casos muy complejos pueden necesitar brackets sí o sí.
-2. **Tu presupuesto:** si el dinero es un factor decisivo, los brackets metálicos ofrecen la mejor relación calidad-precio.
-3. **Tu estilo de vida:** si la estética y la comodidad son prioritarias y puedes permitírtelo, los alineadores invisibles son la opción más cómoda para el día a día.
-
-Un último apunte: independientemente del sistema que elijas, no escatimes en el ortodoncista. Un buen profesional con un sistema económico dará mejores resultados que un profesional mediocre con el sistema más caro del mercado. Pide al menos dos o tres valoraciones antes de decidirte.`,
+<p>No existe un sistema de ortodoncia universalmente mejor: la elección depende de tus necesidades clínicas, tu presupuesto y tu estilo de vida. Lo importante es acudir a un ortodoncista cualificado que evalúe tu caso y te recomiende las opciones viables. En PrecioDental puedes comparar precios de ortodoncia en tu ciudad para empezar tu búsqueda con información fiable y actualizada.</p>`,
   },
 
-  // ── Article 3: Guía de precios dentales ─────────────────────────────────────
+  // ── Article 3: Guía de precios ────────────────────────────────────────────
   {
-    title: "Guía de precios dentales en España 2026",
-    slug: "guia-precios-dentales-espana",
+    title:
+      "Guía de precios dentales 2026: lo que debes saber antes de ir al dentista",
+    slug: "guia-precios-dentales-2026",
     excerpt:
-      "Guía completa con los precios actualizados de todos los tratamientos dentales en España en 2026: desde una limpieza dental por 40 € hasta rehabilitaciones completas sobre implantes.",
-    metaTitle: "Precios dentales en España 2026: guía completa por tratamiento",
+      "Todo lo que necesitas saber sobre precios dentales en España en 2026. Aprende por qué varían los precios, cómo comparar presupuestos y qué señales de alarma debes vigilar.",
+    metaTitle: "Precios dentales en España 2026 | Guía completa",
     metaDescription:
-      "Todos los precios de tratamientos dentales en España actualizados a 2026. Desde limpiezas (40 €) hasta implantes (1.800 €). Compara y ahorra.",
+      "Guía actualizada de precios dentales en España 2026. Aprende a comparar presupuestos, entender las diferencias por zona y detectar señales de alarma en clínicas.",
     targetKeywords: [
       "precios dentales españa",
-      "cuánto cuesta ir al dentista",
+      "cuanto cuesta el dentista",
       "precios tratamientos dentales",
+      "dentista precios",
     ],
-    content: `## ¿Cuánto cuesta ir al dentista en España?
+    publishedAt: "2026-03-08",
+    content: `<p>Ir al dentista genera incertidumbre en muchos pacientes, no solo por el tratamiento en sí, sino por el coste. A diferencia de la sanidad pública, la odontología privada en España funciona con precios libres, lo que significa que cada clínica fija sus propias tarifas. Esta guía te ayudará a entender por qué los precios varían, cómo compararlos con criterio y qué señales de alarma debes tener en cuenta.</p>
 
-Ir al dentista sin saber lo que vas a pagar genera ansiedad. Y es normal: los precios dentales en España varían enormemente según la ciudad, el tipo de clínica y el tratamiento. Esta guía recoge los precios reales del mercado español en 2026 para que puedas hacerte una idea antes de sentarte en el sillón.
+<h2>¿Por qué los precios dentales son tan diferentes entre clínicas?</h2>
 
-## Consultas y diagnóstico
+<p>El precio de un tratamiento dental depende de una combinación de factores que van más allá de la simple oferta y demanda:</p>
 
-Todo empieza por la primera visita. La buena noticia es que muchas clínicas ofrecen la primera consulta gratuita como gancho comercial.
+<ul>
+<li><strong>Ubicación geográfica:</strong> las clínicas en grandes ciudades como Madrid y Barcelona tienen costes fijos más altos (alquiler, personal), lo que se refleja en sus tarifas. En ciudades medianas o del interior los precios suelen ser entre un 10% y un 20% más bajos.</li>
+<li><strong>Cualificación del profesional:</strong> un odontólogo con formación especializada (máster, doctorado, años de experiencia) puede cobrar más que un recién graduado, y esa diferencia suele justificarse por la calidad del resultado.</li>
+<li><strong>Tecnología y materiales:</strong> clínicas que invierten en escáner intraoral, TAC, microscopio o materiales de última generación suelen tener precios más altos, pero ofrecen tratamientos más precisos y predecibles.</li>
+<li><strong>Modelo de negocio:</strong> las cadenas dentales suelen ofrecer precios más competitivos gracias a economías de escala, mientras que las clínicas boutique apuestan por un servicio personalizado con tarifas premium.</li>
+</ul>
 
-| Tratamiento | Precio mín. | Precio máx. | Media |
-|-------------|-------------|-------------|-------|
-| Primera consulta dental | 0 € | 22 € | 15 € |
-| Radiografía panorámica | 0 € | 100 € | 50 € |
-| Radiografía periapical | 20 € | 30 € | 20 € |
-| TAC dental (CBCT) | 100 € | 120 € | 110 € |
+<h2>Zonas de precio en España: Zona A y Zona B</h2>
 
-**Consejo:** muchas clínicas incluyen la radiografía panorámica en la primera visita gratuita. Pregunta antes de ir.
+<p>En el sector dental español se habla habitualmente de dos zonas de precio que las aseguradoras utilizan para fijar sus baremos:</p>
 
-## Tratamientos preventivos y conservadores
+<ul>
+<li><strong>Zona A:</strong> incluye ciudades y áreas metropolitanas con coste de vida alto. Generalmente Barcelona, Madrid, País Vasco, Baleares y algunas zonas de la costa. Los precios en zona A son los más elevados.</li>
+<li><strong>Zona B:</strong> abarca el resto del territorio, incluyendo ciudades medianas y áreas del interior. Los precios suelen ser entre un 8% y un 20% inferiores a la zona A.</li>
+</ul>
 
-Esta es la odontología del día a día: las limpiezas, los empastes y las revisiones que mantienen tu boca sana.
+<p>Esta división es orientativa y no oficial, pero resulta útil para hacerte una idea de los rangos de precio que puedes esperar en tu localidad. En PrecioDental mostramos los precios por ciudad para que puedas hacer una comparación precisa.</p>
 
-| Tratamiento | Precio mín. | Precio máx. | Media |
-|-------------|-------------|-------------|-------|
-| Limpieza dental (profilaxis) | 40 € | 100 € | 55 € |
-| Empaste simple (amalgama/composite) | 44 € | 80 € | 55 € |
-| Empaste compuesto (reconstrucción parcial) | 50 € | 150 € | 80 € |
-| Reconstrucción dental | 60 € | 80 € | 70 € |
-| Férula de descarga | 243 € | 383 € | 290 € |
+<h2>Precios orientativos de los tratamientos más comunes</h2>
 
-La limpieza dental es el tratamiento más demandado y también el más variable en precio. Las clínicas de cadena suelen ofrecerla como reclamo desde 30-40 €, mientras que clínicas privadas de gama alta pueden cobrar hasta 100 €.
+<p>A continuación presentamos los rangos de precio más habituales en España en 2026 para los tratamientos más demandados:</p>
 
-## Endodoncia (matar el nervio)
+<ul>
+<li><strong>Limpieza dental:</strong> 40 € - 100 €</li>
+<li><strong>Empaste:</strong> 44 € - 80 €</li>
+<li><strong>Endodoncia (un conducto):</strong> 100 € - 300 €</li>
+<li><strong>Extracción simple:</strong> 40 € - 90 €</li>
+<li><strong>Extracción muela del juicio:</strong> 50 € - 300 €</li>
+<li><strong>Implante dental completo:</strong> 900 € - 1.800 €</li>
+<li><strong>Corona de circonio:</strong> 399 € - 520 €</li>
+<li><strong>Brackets metálicos:</strong> 2.400 € - 3.380 €</li>
+<li><strong>Ortodoncia invisible:</strong> 3.500 € - 5.330 €</li>
+<li><strong>Blanqueamiento dental:</strong> 250 € - 553 €</li>
+</ul>
 
-Cuando la caries llega al nervio, el empaste ya no basta. La endodoncia es el tratamiento para salvar el diente sin extraerlo.
+<p>Estos rangos incluyen datos de clínicas privadas, cadenas dentales y tarifas de aseguradoras. Para ver los precios desglosados por fuente y ciudad, visita nuestra <a href="/tratamientos">sección de tratamientos</a>.</p>
 
-| Tratamiento | Precio mín. | Precio máx. | Media |
-|-------------|-------------|-------------|-------|
-| Endodoncia unirradicular (1 conducto) | 100 € | 300 € | 230 € |
-| Endodoncia birradicular (2 conductos) | 140 € | 350 € | 250 € |
-| Endodoncia multirradicular (3+ conductos) | 190 € | 415 € | 280 € |
+<h2>Cómo comparar presupuestos dentales</h2>
 
-El precio varía sobre todo por el número de conductos del diente. Una muela tiene tres o cuatro conductos y es más laboriosa que un incisivo con un solo conducto.
+<p>Cuando pides varios presupuestos, no basta con mirar el precio total. Sigue estos pasos para hacer una comparación justa:</p>
 
-## Periodoncia (encías)
+<ul>
+<li><strong>Exige un presupuesto por escrito y desglosado:</strong> cada concepto (diagnóstico, materiales, honorarios, revisiones) debe aparecer por separado.</li>
+<li><strong>Pregunta qué incluye y qué no:</strong> algunos presupuestos no incluyen las revisiones de seguimiento, los retenedores en ortodoncia o las radiografías previas.</li>
+<li><strong>Verifica los materiales:</strong> no es lo mismo una corona de metal-porcelana que una de circonio, ni un implante de marca premium que uno genérico. Pide que especifiquen marca y modelo.</li>
+<li><strong>Compara el tratamiento completo:</strong> un presupuesto más bajo puede acabar siendo más caro si no incluye todas las fases del tratamiento.</li>
+</ul>
 
-Los problemas de encías afectan a más del 30 % de la población adulta española. Si no se tratan, pueden provocar la pérdida de dientes.
+<h2>Seguros dentales: ¿merecen la pena?</h2>
 
-| Tratamiento | Precio mín. | Precio máx. | Media |
-|-------------|-------------|-------------|-------|
-| Curetaje dental (por cuadrante) | 60 € | 100 € | 70 € |
-| Estudio periodontal completo | 100 € | 120 € | 110 € |
-| Cirugía periodontal | 150 € | 250 € | 180 € |
-| Injerto de encía | 180 € | 350 € | 250 € |
+<p>Los seguros dentales en España tienen un coste mensual de entre 8 € y 30 € y ofrecen una serie de tratamientos incluidos (normalmente consulta, limpieza y radiografías) más descuentos en el resto de servicios. Son especialmente interesantes si:</p>
 
-El curetaje es el tratamiento periodontal más frecuente. Se cobra por cuadrante (la boca se divide en cuatro), así que un curetaje completo cuesta entre 240 € y 400 €.
+<ul>
+<li>Necesitas tratamientos de coste medio-alto (endodoncias, implantes, ortodoncia).</li>
+<li>Toda la familia necesita atención dental regular.</li>
+<li>Prefieres tener un precio cerrado y predecible.</li>
+</ul>
 
-## Extracciones
+<p>Sin embargo, conviene leer la letra pequeña: períodos de carencia, clínicas disponibles en tu zona y exclusiones habituales (estética, ciertos tipos de prótesis). En nuestra sección de seguros dentales comparamos las principales aseguradoras con datos reales.</p>
 
-A veces no queda otra que sacar el diente. El precio depende de la complejidad.
+<h2>Señales de alarma en presupuestos dentales</h2>
 
-| Tratamiento | Precio mín. | Precio máx. | Media |
-|-------------|-------------|-------------|-------|
-| Extracción simple | 40 € | 90 € | 55 € |
-| Extracción compleja (quirúrgica) | 60 € | 200 € | 100 € |
-| Extracción muela del juicio | 50 € | 300 € | 150 € |
+<p>Presta atención a estas señales que pueden indicar falta de transparencia o prácticas cuestionables:</p>
 
-Las muelas del juicio incluidas (que no han salido completamente) son las más caras de extraer porque requieren cirugía.
+<ul>
+<li><strong>Precios excesivamente bajos sin justificación:</strong> si un implante te lo ofrecen a 300 € cuando la media del mercado está en 900-1.500 €, desconfía. Puede implicar materiales de baja calidad o profesionales sin la formación adecuada.</li>
+<li><strong>Presupuestos inflados con tratamientos innecesarios:</strong> si en la primera visita te proponen diez tratamientos que nunca antes te habían mencionado, pide una segunda opinión.</li>
+<li><strong>Presión para decidir en el momento:</strong> ofertas que caducan hoy o descuentos que solo aplican si firmas inmediatamente son tácticas de venta, no de salud.</li>
+<li><strong>Falta de información sobre materiales:</strong> una clínica seria no tiene problema en indicar qué marca de implante, composite o cerámica utiliza.</li>
+<li><strong>No entregar presupuesto por escrito:</strong> es tu derecho como paciente y una obligación legal de la clínica.</li>
+</ul>
 
-## Implantes dentales
+<h2>Consejos finales</h2>
 
-Los implantes son el tratamiento que más consultas de precio genera. Y el que más varía de una clínica a otra.
+<ul>
+<li>Acude a revisiones periódicas: prevenir es siempre más barato que tratar.</li>
+<li>Pide siempre al menos dos o tres presupuestos antes de un tratamiento importante.</li>
+<li>Utiliza herramientas como PrecioDental para conocer los rangos de precios antes de acudir a consulta.</li>
+<li>No elijas exclusivamente por precio: la formación del profesional y la calidad de los materiales son igual de importantes.</li>
+</ul>
 
-| Tratamiento | Precio mín. | Precio máx. | Media |
-|-------------|-------------|-------------|-------|
-| Implante dental (solo tornillo) | 380 € | 780 € | 530 € |
-| Implante completo (con corona) | 900 € | 1.800 € | 1.550 € |
-| Corona sobre implante | 450 € | 665 € | 540 € |
-| Elevación de seno maxilar | 360 € | 900 € | 500 € |
-| All-on-4 (arcada completa) | 5.780 € | 10.500 € | 8.000 € |
-
-Lee nuestro artículo detallado sobre [cuánto cuesta un implante dental](/blog/cuanto-cuesta-implante-dental-espana) para un desglose completo.
-
-## Ortodoncia
-
-Corregir la posición de los dientes es una inversión a largo plazo. Los precios incluyen todo el tratamiento, normalmente durante 12-24 meses.
-
-| Tratamiento | Precio mín. | Precio máx. | Media |
-|-------------|-------------|-------------|-------|
-| Brackets metálicos | 2.400 € | 3.380 € | 2.700 € |
-| Brackets de zafiro | 3.300 € | 4.290 € | 3.600 € |
-| Ortodoncia invisible | 3.500 € | 5.330 € | 4.200 € |
-| Invisalign Comprehensive | 4.450 € | 6.695 € | 5.200 € |
-| Retenedores | 80 € | 200 € | 130 € |
-
-## Estética dental
-
-Los tratamientos estéticos son los que más margen de variación tienen, porque dependen mucho de los materiales y la habilidad del profesional.
-
-| Tratamiento | Precio mín. | Precio máx. | Media |
-|-------------|-------------|-------------|-------|
-| Blanqueamiento dental | 250 € | 553 € | 400 € |
-| Carillas de composite (por pieza) | 120 € | 325 € | 200 € |
-| Carillas de porcelana (por pieza) | 350 € | 773 € | 550 € |
-
-## Prótesis dentales
-
-Cuando se han perdido varios dientes y no se opta por implantes, las prótesis removibles siguen siendo una alternativa habitual.
-
-| Tratamiento | Precio mín. | Precio máx. | Media |
-|-------------|-------------|-------------|-------|
-| Corona metal-porcelana | 290 € | 440 € | 350 € |
-| Corona de circonio | 399 € | 520 € | 460 € |
-| Prótesis removible completa | 450 € | 900 € | 600 € |
-| Prótesis removible parcial | 300 € | 700 € | 450 € |
-| Puente dental (3 piezas) | 600 € | 1.400 € | 900 € |
-
-## Cómo ahorrar en el dentista
-
-### 1. Compara presupuestos
-Pide siempre al menos dos o tres presupuestos. Los precios varían hasta un 50 % entre clínicas de la misma ciudad.
-
-### 2. Valora un seguro dental
-Si necesitas tratamientos caros (implantes, ortodoncia), un seguro dental puede ahorrarte entre un 15 % y un 25 %. La cuota mensual está entre 8 € y 25 €.
-
-### 3. Pregunta por paquetes y financiación
-Muchas clínicas ofrecen precios cerrados que incluyen diagnóstico, tratamiento y revisiones. La financiación sin intereses a 6-12 meses es habitual.
-
-### 4. No descuides la prevención
-Una limpieza anual de 55 € y revisiones periódicas pueden evitarte un empaste de 80 € o una endodoncia de 280 €. La prevención siempre es más barata que el tratamiento.
-
-### 5. Compara entre ciudades si el tratamiento lo justifica
-Para tratamientos de alto coste como All-on-4 o múltiples implantes, la diferencia entre ciudades caras y económicas puede ser de miles de euros.`,
+<p>Estar informado es la mejor forma de tomar buenas decisiones sobre tu salud dental. Esperamos que esta guía te sea útil para navegar el mundo de los precios dentales en España con mayor confianza.</p>`,
   },
 
-  // ── Article 4: Seguro dental ────────────────────────────────────────────────
+  // ── Article 4: Seguros dentales ───────────────────────────────────────────
   {
     title: "¿Merece la pena un seguro dental? Análisis con precios reales",
-    slug: "merece-la-pena-seguro-dental-analisis-precios",
+    slug: "merece-la-pena-seguro-dental-analisis",
     excerpt:
-      "Analizamos con datos reales si un seguro dental compensa en España: comparamos el coste anual de las pólizas con el ahorro real en tratamientos dentales de las principales aseguradoras.",
-    metaTitle: "¿Merece la pena un seguro dental? Análisis con precios reales 2026",
+      "Analizamos con datos reales si un seguro dental compensa económicamente. Comparamos primas, tratamientos incluidos y ahorro efectivo en las principales aseguradoras españolas.",
+    metaTitle:
+      "¿Merece la pena un seguro dental? Análisis de precios 2026",
     metaDescription:
-      "Seguro dental desde 8 €/mes. Analizamos si compensa con datos de Sanitas, Adeslas y Cigna. Descubre cuándo merece la pena y cuándo no.",
+      "Análisis con precios reales: ¿compensa un seguro dental en España? Comparamos Sanitas, Adeslas y Cigna. Descubre cuánto puedes ahorrar según tus necesidades.",
     targetKeywords: [
       "seguro dental merece la pena",
+      "mejor seguro dental",
       "seguro dental precio",
-      "ahorro seguro dental",
+      "seguro dental comparativa",
     ],
-    content: `## La pregunta del millón: ¿compensa tener un seguro dental?
+    publishedAt: "2026-03-10",
+    content: `<p>Los seguros dentales son una de las pólizas de salud más contratadas en España, con más de 10 millones de asegurados. Su promesa es clara: acceso a tratamientos dentales a precios reducidos o incluso gratuitos a cambio de una cuota mensual. Pero, ¿realmente compensan? En este artículo analizamos los números con precios reales para ayudarte a decidir.</p>
 
-En España, la sanidad pública cubre muy pocos tratamientos dentales: básicamente extracciones en casos de urgencia y poco más. Todo lo demás sale de tu bolsillo. Ante esta realidad, cada vez más personas se plantean contratar un seguro dental. Pero, ¿realmente compensa económicamente?
+<h2>¿Cómo funcionan los seguros dentales en España?</h2>
 
-La respuesta corta: **depende de cuánto uses el dentista**. La respuesta larga es lo que vamos a desarrollar en este artículo con números reales.
+<p>Los seguros dentales en España funcionan bajo dos modelos principales:</p>
 
-## ¿Cuánto cuesta un seguro dental en España?
+<ul>
+<li><strong>Cuadro médico (concertado):</strong> el más habitual. Pagas una prima mensual y accedes a una red de clínicas donde ciertos tratamientos son gratuitos y el resto tiene un precio reducido según el baremo de la aseguradora. No hay copagos ni facturas sorpresa.</li>
+<li><strong>Reembolso:</strong> puedes acudir a cualquier dentista y la aseguradora te reembolsa un porcentaje del gasto (habitualmente el 70-80%). Es más flexible pero también más caro: las primas suelen ser de 30-50 € al mes.</li>
+</ul>
 
-Las pólizas dentales en España se mueven en una horquilla bastante estrecha:
+<h2>Coste de las principales pólizas dentales</h2>
 
-| Aseguradora | Precio mensual | Precio anual | Carencia |
-|-------------|---------------|-------------|----------|
-| **Sanitas Dental** | 12 - 20 € | 144 - 240 € | 0-3 meses |
-| **Adeslas Dental** | 10 - 18 € | 120 - 216 € | 0-6 meses |
-| **Cigna Healthcare** | 8 - 15 € | 96 - 180 € | 0-3 meses |
-| **DKV Dentisalud** | 9 - 16 € | 108 - 192 € | 0-3 meses |
-| **Asisa Dental** | 8 - 14 € | 96 - 168 € | 0-6 meses |
+<p>Las tres aseguradoras dentales más populares en España y sus precios aproximados en 2026 son:</p>
 
-La mayoría de seguros dentales rondan los **12-15 € al mes**, es decir, unos **150-180 € al año**. Es una cantidad modesta, pero hay que valorar si los descuentos que ofrecen compensan ese gasto.
+<ul>
+<li><strong>Sanitas Dental Milenium:</strong> desde 10 € al mes. Incluye consultas, limpiezas, radiografías y urgencias sin coste adicional. Descuentos del 20-30% en tratamientos no incluidos.</li>
+<li><strong>Adeslas Dental:</strong> desde 9 € al mes. Cobertura similar a Sanitas con una de las redes de clínicas más amplias de España.</li>
+<li><strong>Cigna Healthcare Dental:</strong> desde 12 € al mes. Destaca por incluir algunos tratamientos adicionales sin coste, como fluorización y selladores en niños.</li>
+</ul>
 
-## ¿Qué incluyen los seguros dentales?
+<p>Tomando un promedio de 11 € al mes, el coste anual de un seguro dental básico es de aproximadamente <strong>132 €</strong>.</p>
 
-Los seguros dentales en España funcionan con un sistema mixto:
+<h2>¿Qué tratamientos incluyen sin coste?</h2>
 
-### Tratamientos gratuitos (incluidos en la póliza)
+<p>La mayoría de pólizas dentales incluyen sin coste adicional los siguientes servicios:</p>
 
-- Primera consulta y revisiones anuales
-- Radiografías panorámicas y periapicales
-- Limpiezas dentales (1-2 al año)
-- Extracciones simples
-- Empastes en algunas pólizas
+<ul>
+<li>Primera consulta y diagnóstico.</li>
+<li>Revisiones anuales (una o dos).</li>
+<li>Radiografías (panorámica y periapicales).</li>
+<li>Limpieza dental anual (una o dos).</li>
+<li>Urgencias dentales.</li>
+<li>Extracciones simples (según la póliza).</li>
+</ul>
 
-### Tratamientos con descuento (precio reducido por cuadro médico)
+<p>Solo con la limpieza dental (valor de mercado: 40-100 €) y una radiografía panorámica (50-100 €), ya estarías recuperando buena parte de la prima anual.</p>
 
-- Endodoncias: descuento del 15-25 %
-- Implantes: descuento del 15-25 %
-- Ortodoncia: descuento del 15-25 %
-- Carillas y estética: descuento del 10-20 %
-- Prótesis: descuento del 15-20 %
+<h2>¿Dónde se ahorra más? Ejemplo con precios reales</h2>
 
-### Tratamientos no cubiertos
+<p>Veamos un caso práctico. Imaginemos que durante un año necesitas los siguientes tratamientos:</p>
 
-La mayoría de pólizas excluyen o limitan la odontología altamente especializada como regeneración ósea compleja o rehabilitaciones muy extensas.
+<ul>
+<li>Dos revisiones con radiografía: 0 € (incluido) vs. 100-200 € sin seguro.</li>
+<li>Una limpieza dental: 0 € (incluido) vs. 55-100 € sin seguro.</li>
+<li>Dos empastes: 35-55 € cada uno con seguro vs. 44-80 € cada uno sin seguro.</li>
+<li>Una endodoncia unirradicular: 85-230 € con seguro vs. 100-300 € sin seguro.</li>
+</ul>
 
-## Caso práctico 1: paciente con necesidades básicas
+<p><strong>Coste total sin seguro:</strong> 343-760 € (estimación media: 500 €).</p>
+<p><strong>Coste total con seguro:</strong> 132 € (prima anual) + 155-340 € (tratamientos con descuento) = 287-472 € (estimación media: 350 €).</p>
+<p><strong>Ahorro estimado:</strong> entre 100 € y 200 € en un año con tratamientos moderados.</p>
 
-Imaginemos a María, 35 años, sin problemas dentales graves. Al año necesita:
+<h2>Los tratamientos donde más se nota el ahorro</h2>
 
-**Sin seguro:**
-- 1 revisión con radiografía: 50 €
-- 1 limpieza dental: 55 €
-- **Total: 105 € al año**
+<p>El seguro dental genera mayor ahorro en tratamientos de coste medio-alto:</p>
 
-**Con seguro (Sanitas, 15 €/mes = 180 €/año):**
-- Revisión y radiografía: incluida
-- Limpieza: incluida
-- **Total: 180 € al año**
+<ul>
+<li><strong>Implantes dentales:</strong> ahorro del 15-30% respecto al precio de mercado. En un implante de 1.500 €, eso supone entre 225 € y 450 € de descuento.</li>
+<li><strong>Ortodoncia:</strong> descuentos del 15-25%. En un tratamiento de 3.500 €, el ahorro puede ser de 500-875 €.</li>
+<li><strong>Endodoncias:</strong> precios reducidos entre un 15% y un 25%. En una endodoncia multirradicular de 280 €, puedes ahorrar 40-70 €.</li>
+<li><strong>Prótesis y coronas:</strong> descuentos similares del 15-25%.</li>
+</ul>
 
-**Resultado: el seguro NO compensa.** María paga 75 € más con seguro. Para perfiles de bajo uso, el seguro dental no tiene sentido económico.
+<h2>¿Cuándo NO merece la pena?</h2>
 
-## Caso práctico 2: paciente con necesidades moderadas
+<p>Un seguro dental probablemente no compense si:</p>
 
-Pedro, 45 años, necesita tratamiento periodontal y un empaste este año:
+<ul>
+<li><strong>Solo necesitas una limpieza anual:</strong> el coste de la prima (132 € al año) puede superar lo que pagarías por una limpieza en el mercado libre (40-100 €).</li>
+<li><strong>Ya tienes un dentista de confianza que no está en el cuadro:</strong> cambiar de profesional solo por el seguro no siempre es buena idea, especialmente si estás en medio de un tratamiento.</li>
+<li><strong>Vives en una zona con poca oferta concertada:</strong> si en tu localidad hay pocas clínicas del cuadro, perderás flexibilidad sin obtener suficiente beneficio.</li>
+<li><strong>Planeas tratamientos con carencia:</strong> muchos seguros aplican períodos de carencia de 3 a 6 meses para tratamientos como implantes u ortodoncia. Si necesitas algo urgente, el seguro no te servirá de inmediato.</li>
+</ul>
 
-**Sin seguro:**
-- 1 revisión con radiografía: 50 €
-- 1 limpieza dental: 55 €
-- 2 empastes: 110 €
-- 1 curetaje (4 cuadrantes): 280 €
-- **Total: 495 € al año**
+<h2>Comparativa entre aseguradoras</h2>
 
-**Con seguro (Adeslas, 14 €/mes = 168 €/año):**
-- Revisión y radiografía: incluida
-- Limpieza: incluida
-- 2 empastes con descuento: 85 €
-- Curetaje con descuento: 220 €
-- **Total: 473 € al año**
+<p>A la hora de elegir entre aseguradoras, fíjate en estos criterios:</p>
 
-**Resultado: ahorro marginal de 22 €.** El seguro prácticamente empata. No es un argumento suficiente para contratarlo solo por este motivo, pero sí ofrece la tranquilidad de tener cobertura ante imprevistos.
+<ul>
+<li><strong>Red de clínicas en tu zona:</strong> de nada sirve el mejor seguro si no hay clínicas cerca de ti. Consulta el buscador de cada aseguradora antes de contratar.</li>
+<li><strong>Baremo de precios:</strong> compara los precios con baremo de cada aseguradora para los tratamientos que preveas necesitar. En PrecioDental publicamos estos baremos para que puedas compararlos fácilmente.</li>
+<li><strong>Períodos de carencia:</strong> algunas aseguradoras no aplican carencia en tratamientos básicos, pero sí en ortodoncia o implantes.</li>
+<li><strong>Opiniones de otros usuarios:</strong> la calidad de las clínicas concertadas varía mucho. Busca reseñas específicas de las clínicas a las que acudirías.</li>
+</ul>
 
-## Caso práctico 3: paciente con necesidades importantes
+<h2>Conclusión</h2>
 
-Laura, 55 años, necesita un implante dental y una corona este año:
-
-**Sin seguro:**
-- 1 revisión con TAC: 110 €
-- 1 limpieza dental: 55 €
-- 1 implante completo (con corona): 1.550 €
-- **Total: 1.715 € al año**
-
-**Con seguro (Cigna, 12 €/mes = 144 €/año):**
-- Revisión y TAC: incluida
-- Limpieza: incluida
-- Implante completo con descuento (20 %): 1.240 €
-- **Total: 1.384 € al año**
-
-**Resultado: ahorro de 331 €.** Aquí sí compensa claramente. El ahorro triplica el coste del seguro.
-
-## Caso práctico 4: familia con hijos que necesitan ortodoncia
-
-La familia Gómez: padre, madre y dos hijos adolescentes que necesitan ortodoncia.
-
-**Sin seguro:**
-- 4 revisiones anuales: 200 €
-- 4 limpiezas: 220 €
-- 2 tratamientos de brackets metálicos: 5.400 €
-- **Total: 5.820 €**
-
-**Con seguro familiar (20 €/mes x 4 = 80 €/mes = 960 €/año):**
-- Revisiones: incluidas
-- Limpiezas: incluidas
-- 2 tratamientos de brackets con descuento (20 %): 4.320 €
-- **Total: 5.280 €**
-
-**Resultado: ahorro de 540 €.** El seguro compensa, especialmente si los hijos necesitan ortodoncia.
-
-## ¿Cuándo SÍ merece la pena un seguro dental?
-
-El seguro dental compensa cuando:
-
-- **Necesitas un tratamiento caro** (implantes, ortodoncia, rehabilitaciones)
-- **Eres familia** con hijos en edad de ortodoncia
-- **Tienes patología periodontal** que requiere mantenimientos frecuentes
-- **Prefieres la tranquilidad** de saber que cualquier urgencia estará cubierta sin grandes desembolsos
-
-## ¿Cuándo NO merece la pena?
-
-El seguro dental no compensa cuando:
-
-- **Tienes buena salud bucal** y solo necesitas revisiones y limpiezas anuales
-- **Ya tienes un dentista de confianza** fuera del cuadro médico al que no quieres renunciar
-- **No vas a usar el cuadro médico** de la aseguradora (por ubicación o preferencia)
-
-## Comparativa rápida de aseguradoras
-
-### Sanitas Dental Milenium
-- **Punto fuerte:** red de clínicas propias muy amplia, app bien diseñada
-- **Punto débil:** precio ligeramente superior
-- **Ideal para:** quienes viven en grandes ciudades y valoran la comodidad
-
-### Adeslas Dental
-- **Punto fuerte:** cuadro médico muy extenso, buena cobertura geográfica
-- **Punto débil:** periodos de carencia más largos en algunos tratamientos
-- **Ideal para:** quienes buscan una buena relación cobertura-precio
-
-### Cigna Healthcare
-- **Punto fuerte:** precios competitivos, buen servicio de atención al cliente
-- **Punto débil:** menor red de clínicas en ciudades pequeñas
-- **Ideal para:** quienes buscan el precio más ajustado
-
-## Conclusión: haz las cuentas con tus propios números
-
-No existe una respuesta universal. Lo que sí podemos decir con datos es que:
-
-- Si gastas **menos de 200 € al año** en el dentista, el seguro no te compensa
-- Si gastas **entre 200 € y 500 €**, depende del tipo de tratamiento
-- Si gastas **más de 500 €**, el seguro casi seguro te ahorra dinero
-
-El consejo práctico es sencillo: antes de contratar un seguro dental, calcula cuánto te has gastado en el dentista en los últimos dos años. Si supera los 300-400 € anuales de media, merece la pena explorar opciones. Y si sabes que tienes un tratamiento grande por delante (implantes, ortodoncia), contrata el seguro con antelación suficiente para que pasen los periodos de carencia.`,
+<p>Un seguro dental suele merecer la pena si necesitas más de una limpieza anual y algún tratamiento adicional, especialmente si es de coste medio-alto. Para una familia con hijos que necesitan ortodoncia o adultos que prevean implantes, el ahorro puede ser significativo. Si solo necesitas mantenimiento básico, valora si la prima anual compensa frente a pagar de tu bolsillo. En cualquier caso, consulta los precios actualizados en nuestra <a href="/seguros-dentales">sección de seguros dentales</a> para comparar con datos reales antes de tomar una decisión.</p>`,
   },
 
-  // ── Article 5: Blanqueamiento dental ────────────────────────────────────────
+  // ── Article 5: Blanqueamiento dental ──────────────────────────────────────
   {
-    title: "Blanqueamiento dental: tipos, precios y lo que debes saber",
+    title:
+      "Blanqueamiento dental: tipos, precios y qué esperar del tratamiento",
     slug: "blanqueamiento-dental-tipos-precios",
     excerpt:
-      "Todo sobre el blanqueamiento dental en España: precios desde 250 € en clínica, tipos de tratamiento, duración de los resultados, riesgos y cómo elegir la mejor opción para tu caso.",
-    metaTitle: "Blanqueamiento dental: tipos, precios y guía completa 2026",
+      "Todo sobre el blanqueamiento dental en 2026: tipos de tratamiento, precios en España, duración de los resultados y cuidados posteriores. Guía completa para pacientes.",
+    metaTitle:
+      "Blanqueamiento dental: tipos y precios en España 2026",
     metaDescription:
-      "Blanqueamiento dental en España desde 250 €. Comparamos los distintos tipos (LED, láser, férulas), su duración, riesgos y precios actualizados.",
+      "Blanqueamiento dental en España: precios desde 250€ hasta 553€. Comparamos blanqueamiento en clínica, domiciliario, LED y láser. Resultados, duración y mantenimiento.",
     targetKeywords: [
       "blanqueamiento dental precio",
-      "cuánto cuesta blanqueamiento dental",
       "blanqueamiento dental tipos",
+      "cuanto cuesta blanqueamiento dental",
+      "blanqueamiento dental antes y despues",
     ],
-    content: `## Blanqueamiento dental: la guía que tu dentista debería darte
+    publishedAt: "2026-03-12",
+    content: `<p>El blanqueamiento dental es uno de los tratamientos estéticos más populares en odontología. Consiste en aclarar el tono de los dientes mediante agentes químicos que eliminan las manchas superficiales y profundas del esmalte. Si estás pensando en blanquearte los dientes, esta guía te explica los tipos disponibles, sus precios en España y qué resultados puedes esperar de forma realista.</p>
 
-El blanqueamiento dental es uno de los tratamientos estéticos más solicitados en las clínicas españolas. No es invasivo, los resultados son visibles desde la primera sesión y puede mejorar significativamente tu sonrisa. Pero hay mucha confusión sobre los diferentes tipos, los precios reales y lo que puedes esperar de forma realista.
+<h2>¿Cómo funciona el blanqueamiento dental?</h2>
 
-## ¿Cuánto cuesta un blanqueamiento dental en España?
+<p>Todos los sistemas de blanqueamiento dental profesional utilizan uno de estos dos agentes activos:</p>
 
-El precio de un blanqueamiento dental profesional en España en 2026 se sitúa entre **250 € y 553 €**, con una media de unos **400 €**. Pero hay matices importantes.
+<ul>
+<li><strong>Peróxido de hidrógeno:</strong> actúa de forma rápida y se utiliza principalmente en tratamientos en clínica. Su concentración puede llegar al 25-40% bajo supervisión profesional.</li>
+<li><strong>Peróxido de carbamida:</strong> libera peróxido de hidrógeno de forma gradual y se utiliza en los kits domiciliarios supervisados. Las concentraciones habituales son del 10-22%.</li>
+</ul>
 
-| Tipo de blanqueamiento | Precio mín. | Precio máx. | Media |
-|------------------------|-------------|-------------|-------|
-| En clínica (LED/láser) | 250 € | 553 € | 400 € |
-| Ambulatorio con férulas | 150 € | 350 € | 250 € |
-| Combinado (clínica + férulas) | 350 € | 650 € | 480 € |
-| Blanqueamiento interno (diente endodonciado) | 80 € | 150 € | 100 € |
+<p>Estos agentes penetran en la estructura del esmalte y rompen las moléculas de pigmento responsables de la decoloración, devolviendo al diente un tono más claro. El resultado depende del color original, el tipo de manchas y la concentración del agente utilizado.</p>
 
-Los kits de blanqueamiento de farmacia o venta online cuestan entre 20 € y 80 €, pero sus resultados no son comparables a los profesionales y pueden dañar el esmalte si se usan incorrectamente.
+<h2>Tipos de blanqueamiento dental</h2>
 
-## Tipos de blanqueamiento dental profesional
+<h3>Blanqueamiento en clínica (profesional)</h3>
+<p>Se realiza en una sola sesión de 45 a 90 minutos en la consulta del dentista. El profesional aplica una alta concentración de peróxido de hidrógeno directamente sobre los dientes, protegiendo previamente las encías con una barrera de resina. Es el método más rápido, con resultados visibles de forma inmediata: los dientes pueden aclararse entre 3 y 8 tonos en una sola sesión.</p>
+<p><strong>Precio:</strong> entre 250 € y 553 € por sesión.</p>
 
-### Blanqueamiento en clínica (en consulta)
+<h3>Blanqueamiento con luz LED</h3>
+<p>Es una variante del blanqueamiento en clínica que utiliza una fuente de luz LED para activar o acelerar el gel blanqueador. La evidencia científica sobre si la luz LED realmente mejora el resultado es debatida, pero muchas clínicas lo ofrecen como un servicio premium. La sesión dura entre 30 y 60 minutos.</p>
+<p><strong>Precio:</strong> entre 300 € y 600 €, ligeramente superior al blanqueamiento convencional en clínica.</p>
 
-Es la opción más rápida. El dentista aplica un gel de peróxido de hidrógeno a alta concentración (25-40 %) sobre los dientes y lo activa con una lámpara LED o láser. El tratamiento dura entre 45 y 90 minutos y suele hacerse en una o dos sesiones.
+<h3>Blanqueamiento con láser</h3>
+<p>Utiliza un láser de diodo para activar el agente blanqueador. Es el más rápido de todos los métodos y suele requerir menos tiempo de exposición del producto sobre los dientes, lo que puede reducir la sensibilidad postoperatoria. Sin embargo, es también el más costoso.</p>
+<p><strong>Precio:</strong> entre 400 € y 800 €.</p>
 
-**Ventajas:**
-- Resultados inmediatos y visibles
-- Supervisión profesional durante todo el proceso
-- Control preciso de la concentración del agente blanqueador
-- Protección de encías y tejidos blandos
+<h3>Blanqueamiento domiciliario supervisado</h3>
+<p>El dentista toma moldes de tus dientes y fabrica unas férulas personalizadas de silicona. El paciente aplica un gel de peróxido de carbamida dentro de las férulas y las lleva puestas durante unas horas al día (o durante la noche) a lo largo de 2 a 4 semanas. Los resultados son más graduales pero igualmente efectivos.</p>
+<p><strong>Precio:</strong> entre 150 € y 350 € (incluye férulas y gel para todo el tratamiento).</p>
 
-**Desventajas:**
-- Precio más elevado
-- Mayor sensibilidad dental post-tratamiento (suele remitir en 24-72 horas)
-- Puede requerir dos sesiones para casos de decoloración intensa
+<h3>Blanqueamiento combinado</h3>
+<p>Muchos dentistas recomiendan combinar una sesión en clínica con un tratamiento domiciliario de mantenimiento. Esta combinación suele ofrecer los mejores resultados a largo plazo y permite al paciente hacer retoques periódicos en casa.</p>
+<p><strong>Precio:</strong> entre 350 € y 700 € por el paquete completo.</p>
 
-### Blanqueamiento ambulatorio (con férulas)
+<h2>¿Cuánto duran los resultados?</h2>
 
-El dentista toma una impresión de tu boca y fabrica unas férulas de silicona a medida. Tú aplicas en casa un gel de peróxido de carbamida (10-16 %) dentro de las férulas y las llevas puestas entre 2 y 8 horas al día (muchos pacientes las usan para dormir) durante 2 a 4 semanas.
+<p>La duración del blanqueamiento depende en gran medida de los hábitos del paciente:</p>
 
-**Ventajas:**
-- Más económico que el blanqueamiento en clínica
-- Resultados progresivos y muy naturales
-- Menor sensibilidad dental
-- Las férulas sirven para retoques futuros (solo compras el gel)
+<ul>
+<li><strong>Sin factores de tinción:</strong> los resultados pueden mantenerse entre 1 y 3 años.</li>
+<li><strong>Con consumo habitual de café, té, vino tinto o tabaco:</strong> el efecto puede empezar a disminuir a partir de los 6 meses.</li>
+</ul>
 
-**Desventajas:**
-- Requiere constancia y disciplina
-- Los resultados tardan semanas en ser visibles
-- Necesitas guardar las férulas correctamente
+<p>En cualquier caso, el blanqueamiento no es permanente. Los dientes volverán a oscurecerse con el tiempo, aunque normalmente no al nivel de decoloración previo al tratamiento. Los retoques domiciliarios con las férulas permiten mantener el tono durante más tiempo.</p>
 
-### Blanqueamiento combinado
+<h2>¿Es seguro? Efectos secundarios</h2>
 
-Muchos dentistas consideran que el protocolo ideal combina ambos: una o dos sesiones en clínica para un aclaramiento inicial rápido, seguidas de un tratamiento ambulatorio con férulas para perfeccionar y estabilizar el resultado.
+<p>El blanqueamiento dental profesional es un procedimiento seguro cuando lo realiza o supervisa un dentista cualificado. Los efectos secundarios más comunes son:</p>
 
-Es la opción más completa, pero también la más cara (entre 350 € y 650 €).
+<ul>
+<li><strong>Sensibilidad dental temporal:</strong> es el efecto más frecuente. Suele aparecer durante las primeras 24-48 horas y desaparece por sí sola. El uso de pastas desensibilizantes antes y después del tratamiento ayuda a minimizarla.</li>
+<li><strong>Irritación de encías:</strong> puede ocurrir si el gel entra en contacto con el tejido gingival. En tratamientos en clínica se evita con la barrera protectora; en domiciliarios, con férulas bien ajustadas.</li>
+</ul>
 
-### Blanqueamiento interno
+<p>El blanqueamiento no daña el esmalte dental cuando se realiza según las indicaciones del fabricante y bajo supervisión profesional. Sin embargo, no está indicado para todos los pacientes: los dientes con restauraciones de composite o porcelana no cambian de color con el blanqueamiento, lo que puede generar diferencias de tono.</p>
 
-Se utiliza exclusivamente en dientes que han sido endodonciados y se han oscurecido. El dentista coloca el agente blanqueador dentro del diente y lo sella temporalmente. Se cambia cada 3-5 días hasta alcanzar el tono deseado. Cuesta entre 80 € y 150 € por diente.
+<h2>¿Quién puede hacerse un blanqueamiento?</h2>
 
-## ¿Cuánto dura el blanqueamiento dental?
+<p>El blanqueamiento está indicado para pacientes mayores de 16-18 años con dientes sanos y sin caries activas ni enfermedad periodontal. Antes de realizar el tratamiento, el dentista debe:</p>
 
-Los resultados de un blanqueamiento profesional duran entre **1 y 3 años**, aunque esto varía mucho según tus hábitos:
+<ul>
+<li>Realizar una exploración completa para descartar patologías.</li>
+<li>Hacer una limpieza dental para eliminar el sarro y la placa.</li>
+<li>Evaluar el tipo de decoloración (las manchas intrínsecas por tetraciclinas responden peor al blanqueamiento convencional).</li>
+<li>Informar sobre expectativas realistas de resultado.</li>
+</ul>
 
-**Factores que acortan la duración:**
-- Tabaco (el principal enemigo del blanqueamiento)
-- Café, té y vino tinto en exceso
-- Mala higiene dental
-- Alimentos con colorantes intensos (curry, salsa de soja, frutos rojos)
+<h2>Consejos para mantener los resultados</h2>
 
-**Factores que alargan la duración:**
-- No fumar
-- Buena higiene (cepillado correcto, hilo dental)
-- Retoques periódicos con férulas (una vez cada 6-12 meses, solo necesitas comprar el gel por 25-40 €)
-- Enjuague con agua después de consumir bebidas pigmentantes
+<ul>
+<li>Evita o reduce el consumo de café, té, vino tinto y tabaco durante las primeras 48 horas y, en general, en tu día a día.</li>
+<li>Cepíllate los dientes después de cada comida con una pasta blanqueadora suave.</li>
+<li>Utiliza las férulas domiciliarias para retoques cada 4-6 meses.</li>
+<li>Acude a tus revisiones y limpiezas dentales periódicas.</li>
+</ul>
 
-## ¿Quién puede hacerse un blanqueamiento dental?
-
-El blanqueamiento no es para todo el mundo. Está contraindicado en:
-
-- **Menores de 16 años:** el esmalte no está completamente formado
-- **Embarazadas y mujeres en periodo de lactancia:** por precaución
-- **Personas con caries activas o enfermedad periodontal:** hay que tratar primero la patología
-- **Personas con restauraciones en dientes anteriores:** las carillas, empastes y coronas no se blanquean. Si blanqueas los dientes naturales, las restauraciones quedarán de un tono diferente
-- **Sensibilidad dental severa:** el tratamiento puede empeorarla temporalmente
-
-## Riesgos y efectos secundarios
-
-El blanqueamiento dental profesional es seguro cuando lo realiza un odontólogo cualificado. Los efectos secundarios más comunes son:
-
-- **Sensibilidad dental:** afecta al 60-70 % de los pacientes, pero es temporal (24-72 horas). Se puede mitigar con pastas desensibilizantes y con la concentración adecuada del gel.
-- **Irritación de encías:** si el gel entra en contacto con las encías. En clínica, el dentista las protege con una barrera. Con férulas, es importante que estén bien ajustadas.
-- **Resultados desiguales:** si hay empastes, coronas o carillas que no se blanquean al mismo ritmo.
-
-Lo que **no** hace el blanqueamiento: no daña el esmalte, no debilita los dientes y no provoca caries. Estos son mitos que circulan en internet pero que no tienen respaldo científico cuando el tratamiento se hace correctamente.
-
-## ¿Qué afecta al precio del blanqueamiento?
-
-- **El tipo de sistema:** el LED es más económico que el láser, pero los resultados son comparables
-- **La ciudad:** en Barcelona puede costar un 10-15 % más que en Sevilla o Murcia
-- **El número de sesiones:** las decoloraciones severas (por tetraciclinas, fluorosis) pueden necesitar más sesiones
-- **La clínica:** las clínicas de estética dental premium cobran más por la experiencia y los materiales
-
-## Blanqueamiento dental con seguro: ¿hay descuento?
-
-La mayoría de seguros dentales incluyen un descuento del 10-20 % en blanqueamiento dental a través de su cuadro médico. Esto puede suponer un ahorro de 40-80 €. No es un gran descuento, pero si ya tienes seguro dental por otros motivos, aprovéchalo.
-
-## Nuestra recomendación
-
-Si es tu primer blanqueamiento y buscas buena relación calidad-precio, el **blanqueamiento ambulatorio con férulas** es probablemente tu mejor opción. Es más económico, los resultados son igual de buenos (solo tardan más en verse) y te llevas las férulas para retoques futuros.
-
-Si necesitas resultados rápidos para un evento (boda, reunión importante), el **blanqueamiento en clínica** te da un aclaramiento visible en una sola sesión.
-
-Y un último consejo: antes de blanquearte los dientes, hazte una limpieza dental profesional. El sarro y las tinciones superficiales se eliminan con la limpieza, y el blanqueamiento actúa mejor sobre dientes limpios. Muchas clínicas ofrecen un paquete de limpieza + blanqueamiento a precio reducido.`,
+<p>Para conocer el precio del blanqueamiento dental en tu ciudad, consulta nuestra <a href="/tratamientos/blanqueamiento-dental">página de precios de blanqueamiento dental</a> donde comparamos tarifas de clínicas y aseguradoras.</p>`,
   },
 
-  // ── Article 6: Carillas dentales ────────────────────────────────────────────
+  // ── Article 6: Carillas dentales ──────────────────────────────────────────
   {
-    title: "Carillas dentales: diferencias entre composite y porcelana",
-    slug: "carillas-dentales-composite-vs-porcelana",
+    title:
+      "Carillas dentales: composite vs porcelana — precio y durabilidad",
+    slug: "carillas-dentales-composite-vs-porcelana-precio",
     excerpt:
-      "Comparativa detallada entre carillas de composite (desde 120 €/pieza) y carillas de porcelana (desde 350 €/pieza): diferencias en precio, durabilidad, estética y cuándo elegir cada una.",
-    metaTitle: "Carillas dentales: composite vs porcelana, precios y diferencias 2026",
+      "Comparativa completa entre carillas de composite y porcelana: precios en España, durabilidad, estética y proceso de colocación. Te ayudamos a elegir la mejor opción.",
+    metaTitle:
+      "Carillas dentales: composite vs porcelana | Precios 2026",
     metaDescription:
-      "Carillas de composite desde 120 € vs porcelana desde 350 € por pieza. Comparamos durabilidad, estética, precio y cuándo conviene cada tipo.",
+      "Carillas de composite desde 120€ y de porcelana desde 350€ por pieza. Comparamos durabilidad, estética, preparación y precio para que elijas la mejor opción.",
     targetKeywords: [
       "carillas dentales precio",
       "carillas composite vs porcelana",
-      "cuánto cuestan las carillas",
+      "carillas de porcelana precio",
+      "carillas dentales antes y despues",
     ],
-    content: `## Carillas dentales: todo lo que necesitas saber antes de decidirte
+    publishedAt: "2026-03-14",
+    content: `<p>Las carillas dentales son láminas finas que se adhieren a la cara visible de los dientes para mejorar su aspecto. Permiten corregir el color, la forma, el tamaño y pequeñas imperfecciones de alineación sin necesidad de ortodoncia. Los dos materiales principales son el composite y la porcelana (cerámica), y cada uno tiene características muy distintas en cuanto a precio, durabilidad y resultado estético.</p>
 
-Las carillas dentales se han convertido en el tratamiento estrella de la estética dental. Permiten corregir el color, la forma y pequeñas imperfecciones de los dientes sin tratamientos invasivos. Pero no todas las carillas son iguales: la diferencia entre composite y porcelana es sustancial en precio, duración y resultado.
+<h2>¿Qué son las carillas dentales y para qué sirven?</h2>
 
-## ¿Cuánto cuestan las carillas dentales en España?
+<p>Las carillas son una solución estética que se utiliza para tratar:</p>
 
-El precio de las carillas varía enormemente según el material. Estos son los precios por pieza en 2026:
+<ul>
+<li><strong>Dientes amarillentos o manchados</strong> que no responden al blanqueamiento convencional.</li>
+<li><strong>Dientes con fracturas o desgastes</strong> que afectan a su apariencia.</li>
+<li><strong>Diastemas</strong> (espacios entre dientes) que el paciente quiere cerrar sin ortodoncia.</li>
+<li><strong>Dientes con formas irregulares</strong> o tamaños desproporcionados.</li>
+<li><strong>Pequeñas malposiciones</strong> que no justifican un tratamiento de ortodoncia completo.</li>
+</ul>
 
-| Tipo de carilla | Precio mín. | Precio máx. | Media |
-|-----------------|-------------|-------------|-------|
-| **Carilla de composite** | 120 € | 325 € | 200 € |
-| **Carilla de porcelana** | 350 € | 773 € | 550 € |
+<p>Es importante entender que las carillas son un tratamiento estético, no funcional. No sustituyen a una corona cuando el diente está muy dañado, ni corrigen problemas de mordida significativos.</p>
 
-Un dato importante: las carillas se colocan normalmente en los dientes visibles al sonreír, que suelen ser entre 6 y 10 piezas (de colmillo a colmillo, o de premolar a premolar). Esto significa que un tratamiento completo cuesta:
+<h2>Carillas de composite: características y precio</h2>
 
-- **Composite (8 piezas):** entre 960 € y 2.600 €
-- **Porcelana (8 piezas):** entre 2.800 € y 6.184 €
+<p>Las carillas de composite se fabrican directamente sobre el diente en una sola sesión, utilizando resina compuesta que el dentista modela y esculpe capa a capa. Este proceso se denomina carilla directa.</p>
 
-La diferencia es considerable, y es la razón principal por la que muchos pacientes optan por el composite.
+<h3>Ventajas del composite</h3>
+<ul>
+<li><strong>Precio más accesible:</strong> entre 120 € y 325 € por pieza, lo que las convierte en la opción más económica.</li>
+<li><strong>Tratamiento en una sola sesión:</strong> no requiere laboratorio ni provisionales.</li>
+<li><strong>Reversible y reparable:</strong> si una carilla se rompe o tiñe, el dentista puede repararla o sustituirla fácilmente sin tocar el diente subyacente.</li>
+<li><strong>Mínima o nula preparación dental:</strong> en muchos casos no es necesario tallar el diente, lo que preserva el esmalte natural.</li>
+</ul>
 
-## Carillas de composite: qué son y cómo se hacen
+<h3>Inconvenientes del composite</h3>
+<ul>
+<li><strong>Menor durabilidad:</strong> la vida útil media es de 5 a 7 años, frente a los 10-15 de la porcelana.</li>
+<li><strong>Susceptibilidad a las manchas:</strong> el composite absorbe pigmentos del café, vino y tabaco con mayor facilidad que la porcelana.</li>
+<li><strong>Menor translucidez:</strong> aunque los composites modernos han mejorado mucho, no alcanzan la naturalidad de la porcelana de alta calidad.</li>
+<li><strong>Requieren más mantenimiento:</strong> pulido periódico (cada 6-12 meses) para mantener el brillo y prevenir la decoloración.</li>
+</ul>
 
-Las carillas de composite se fabrican directamente sobre el diente, capa a capa, usando una resina del mismo material que los empastes estéticos. El dentista esculpe la carilla in situ, moldeando la forma y el color durante la cita.
+<h2>Carillas de porcelana: características y precio</h2>
 
-### Proceso de colocación
+<p>Las carillas de porcelana (también llamadas cerámicas o de feldespato/disilicato de litio) se fabrican en un laboratorio dental a partir de moldes digitales o físicos de los dientes del paciente. El proceso requiere dos o tres visitas: una para la preparación y toma de impresiones, otra para la prueba y cementación definitiva.</p>
 
-1. **Preparación mínima del diente:** en la mayoría de los casos no hace falta tallar el esmalte. Se hace un ligero pulido superficial.
-2. **Aplicación del adhesivo:** se acondiciona la superficie del diente con ácido fosfórico y un adhesivo.
-3. **Estratificación del composite:** el dentista aplica capas de resina de diferentes opacidades y colores para imitar la naturalidad del diente.
-4. **Polimerización con luz:** cada capa se endurece con una lámpara de fotocurado.
-5. **Pulido y ajuste de la oclusión.**
+<h3>Ventajas de la porcelana</h3>
+<ul>
+<li><strong>Estética superior:</strong> la porcelana reproduce la translucidez y luminosidad del esmalte natural de forma excepcional. Es prácticamente indistinguible de un diente natural bien cuidado.</li>
+<li><strong>Alta durabilidad:</strong> con buen mantenimiento, las carillas de porcelana pueden durar entre 10 y 15 años, e incluso más en algunos casos.</li>
+<li><strong>Resistencia a las manchas:</strong> la superficie vitrea de la porcelana es mucho más resistente a la pigmentación que el composite.</li>
+<li><strong>Estabilidad del color:</strong> no se decoloran ni amarillean con el tiempo como puede ocurrir con el composite.</li>
+</ul>
 
-Todo el proceso se hace en una sola cita de 1 a 3 horas (dependiendo del número de dientes).
+<h3>Inconvenientes de la porcelana</h3>
+<ul>
+<li><strong>Precio más elevado:</strong> entre 350 € y 773 € por pieza. Un tratamiento de 6-8 carillas puede superar fácilmente los 3.000 €.</li>
+<li><strong>Proceso irreversible:</strong> en la mayoría de casos, el dentista necesita tallar una fina capa de esmalte (0,3-0,7 mm) para alojar la carilla. Una vez tallado el diente, siempre necesitará una carilla.</li>
+<li><strong>Requiere varias visitas:</strong> el proceso completo tarda entre 2 y 3 semanas, durante las cuales el paciente lleva carillas provisionales.</li>
+<li><strong>Reparación más compleja:</strong> si una carilla de porcelana se fractura, generalmente hay que sustituirla por completo, lo que implica un nuevo coste.</li>
+</ul>
 
-### Ventajas del composite
+<h2>Comparativa directa: composite vs porcelana</h2>
 
-- **Precio significativamente menor** que la porcelana
-- **Reversible:** al no tallar el esmalte (o tallarlo mínimamente), se puede volver al estado original
-- **Se hace en una sola cita:** no hay que esperar a que el laboratorio fabrique nada
-- **Fácil de reparar:** si se fractura una esquina, se puede recomponer en consulta
-- **Conservador:** se preserva más estructura dental
+<ul>
+<li><strong>Precio por pieza:</strong> Composite 120-325 € vs. Porcelana 350-773 €.</li>
+<li><strong>Durabilidad:</strong> Composite 5-7 años vs. Porcelana 10-15 años.</li>
+<li><strong>Sesiones necesarias:</strong> Composite 1 vs. Porcelana 2-3.</li>
+<li><strong>Preparación del diente:</strong> Composite mínima o nula vs. Porcelana tallado fino necesario.</li>
+<li><strong>Resistencia a manchas:</strong> Composite moderada vs. Porcelana alta.</li>
+<li><strong>Reparabilidad:</strong> Composite fácil y económica vs. Porcelana sustitución completa.</li>
+<li><strong>Resultado estético:</strong> Composite bueno (depende del profesional) vs. Porcelana excelente.</li>
+</ul>
 
-### Desventajas del composite
+<h2>¿Cuándo elegir cada opción?</h2>
 
-- **Menor duración:** entre 5 y 8 años frente a los 10-20 de la porcelana
-- **Se tiñen con el tiempo:** el composite absorbe pigmentos del café, vino, tabaco
-- **Requieren mantenimiento:** pulidos periódicos cada 6-12 meses para mantener el brillo
-- **Resultado estético inferior:** un buen composite puede ser excelente, pero la porcelana tiene un brillo y translucidez más natural
-- **Dependen mucho del profesional:** el resultado final está directamente ligado a la habilidad manual del dentista
+<p><strong>Las carillas de composite son ideales si:</strong></p>
+<ul>
+<li>Tienes un presupuesto limitado y quieres mejorar tu sonrisa de forma accesible.</li>
+<li>Solo necesitas corregir uno o dos dientes con imperfecciones menores.</li>
+<li>Prefieres un tratamiento reversible que no implique tallar tus dientes.</li>
+<li>Buscas un resultado inmediato en una sola visita.</li>
+</ul>
 
-## Carillas de porcelana: qué son y cómo se hacen
+<p><strong>Las carillas de porcelana son ideales si:</strong></p>
+<ul>
+<li>Buscas la máxima naturalidad y durabilidad a largo plazo.</li>
+<li>Quieres una transformación completa de tu sonrisa (varias piezas).</li>
+<li>Consumes habitualmente café, té o vino y necesitas un material resistente a las manchas.</li>
+<li>Estás dispuesto a invertir más para obtener un resultado de mayor calidad y longevidad.</li>
+</ul>
 
-Las carillas de porcelana (también llamadas carillas de cerámica) son láminas ultrafinas fabricadas en un laboratorio dental a partir de un molde de tu boca. Se cementan sobre la cara visible del diente con un adhesivo especial.
+<h2>El proceso de colocación paso a paso</h2>
 
-### Proceso de colocación
+<h3>Carillas de composite</h3>
+<p>En una sola sesión de 1 a 2 horas, el dentista aplica el composite directamente sobre el diente, lo modela, endurece con luz halógena o LED y pule hasta conseguir el acabado deseado. No suele requerir anestesia si no hay tallado previo.</p>
 
-1. **Estudio y planificación:** se toman fotos, radiografías y un escáner digital o impresiones de la boca.
-2. **Diseño digital (DSD):** muchas clínicas usan Diseño de Sonrisa Digital para que veas el resultado antes de empezar.
-3. **Mock-up:** se fabrica una maqueta en resina sobre tus dientes para probar el diseño en boca.
-4. **Preparación dental:** se talla una fina capa de esmalte (0,3-0,7 mm). En algunos casos de carillas ultrafinas (tipo Lumineers), el tallado es mínimo o nulo.
-5. **Impresión definitiva y provisionales:** se toman los registros para el laboratorio y se colocan carillas provisionales.
-6. **Fabricación en laboratorio:** entre 7 y 14 días.
-7. **Cementado definitivo:** las carillas se pegan con un cemento de resina de alta adhesión.
+<h3>Carillas de porcelana</h3>
+<p>En la primera visita se talla una fina capa de esmalte y se toman impresiones digitales o de silicona. Se colocan carillas provisionales. El laboratorio fabrica las carillas definitivas en 7-14 días. En la segunda visita se retiran los provisionales, se prueban las definitivas y se cementan con un adhesivo especial. El resultado es permanente y definitivo.</p>
 
-El proceso completo requiere entre 2 y 4 citas a lo largo de 2-3 semanas.
+<h2>Mantenimiento y cuidados</h2>
 
-### Ventajas de la porcelana
+<ul>
+<li>Cepíllate los dientes al menos dos veces al día con un cepillo de cerdas suaves.</li>
+<li>Evita morder objetos duros (bolígrafos, hielo, uñas) que puedan fracturar las carillas.</li>
+<li>Si padeces bruxismo, usa una férula de descarga nocturna para proteger las carillas.</li>
+<li>Acude a revisiones cada 6 meses para que el dentista valore el estado de las carillas.</li>
+<li>En el caso del composite, solicita un pulido profesional anual para mantener el brillo.</li>
+</ul>
 
-- **Estética superior:** la porcelana reproduce mejor la translucidez y el brillo natural del esmalte
-- **Mayor duración:** entre 10 y 20 años con buen mantenimiento
-- **No se tiñen:** la cerámica es resistente a los pigmentos
-- **Resultado muy predecible:** al fabricarse en laboratorio, se controla cada detalle
-- **Mantienen el brillo:** no necesitan pulidos periódicos
-
-### Desventajas de la porcelana
-
-- **Precio mucho mayor** que el composite
-- **Requieren tallar el diente:** es un proceso irreversible en la mayoría de los casos
-- **Más difíciles de reparar:** si se fractura una carilla, normalmente hay que sustituirla
-- **Varias citas:** el proceso es más largo
-- **Si alguna se despega o rompe, la reparación es cara**
-
-## ¿Cuándo elegir composite y cuándo porcelana?
-
-### Elige composite si:
-
-- Tu presupuesto es limitado
-- Quieres corregir pequeñas imperfecciones (un diente ligeramente girado, una fractura menor, cerrar un pequeño diastema)
-- No quieres que se talle tu esmalte
-- Eres joven y prefieres una opción reversible
-- Solo necesitas carillas en 1-3 dientes
-
-### Elige porcelana si:
-
-- Buscas un cambio estético importante y duradero
-- Quieres corregir el color, la forma y la alineación de toda la zona visible
-- Puedes permitirte la inversión
-- Priorizas un resultado que no requiera mantenimiento frecuente
-- Fumas o consumes mucho café y te preocupa la tinción
-
-## Factores que afectan al precio de las carillas
-
-### El material específico
-
-Dentro de la porcelana hay variaciones: las carillas de disilicato de litio (E.max) son las más populares. Las de feldespato son más artesanales y caras. Las de circonio se usan menos para carillas y más para coronas.
-
-### El laboratorio dental
-
-Un laboratorio de alta gama puede cobrar al dentista entre 200 € y 400 € por carilla, mientras que uno estándar cobra entre 80 € y 150 €. Esto repercute directamente en el precio final.
-
-### La ciudad
-
-Como en todo tratamiento dental, Barcelona y Madrid son las ciudades más caras. Un set de 8 carillas de porcelana puede costar 1.000-1.500 € más que en ciudades como Valencia, Sevilla o Zaragoza.
-
-### El número de carillas
-
-Algunas clínicas ofrecen precios por paquete: 6, 8 o 10 carillas con un precio unitario más bajo que si se hacen de forma individual.
-
-## ¿Las carillas dañan los dientes?
-
-Es la pregunta que más preocupa a los pacientes, y la respuesta tiene matices:
-
-- **Carillas de composite sin tallado:** no dañan el diente en absoluto. Son completamente reversibles.
-- **Carillas de composite con tallado mínimo:** el daño es insignificante.
-- **Carillas de porcelana con tallado:** se elimina una fina capa de esmalte que no se regenera. El diente queda preparado y siempre necesitará una carilla o una corona encima. Esto no significa que esté "dañado" en el sentido patológico, pero sí que el tratamiento es irreversible.
-
-## ¿Las carillas se pueden quitar?
-
-Las de composite sí: se pulen y el diente queda como estaba (o casi). Las de porcelana, en principio no: el diente tallado necesita una restauración permanente. Sin embargo, las carillas ultrafinas tipo Lumineers que no requieren tallado sí pueden retirarse.
-
-## Nuestra recomendación
-
-Si estás empezando a explorar las carillas dentales, nuestro consejo es que pidas una valoración con un dentista especializado en estética dental y le pidas ver casos reales de su trabajo, tanto en composite como en porcelana. Las fotos de antes y después del propio profesional valen más que cualquier folleto comercial.
-
-Y un dato práctico: si tu prioridad es cerrar un diastema (separación entre dientes) o corregir un diente ligeramente torcido, el composite probablemente sea suficiente. Si buscas un cambio de sonrisa completo, la porcelana dará un resultado más predecible y duradero, pero prepárate para una inversión considerable.`,
+<p>Para comparar precios de carillas dentales en tu ciudad, visita nuestra <a href="/tratamientos/carillas-de-composite">sección de carillas de composite</a> o <a href="/tratamientos/carillas-de-porcelana">carillas de porcelana</a> donde publicamos precios actualizados de clínicas y aseguradoras en toda España.</p>`,
   },
 ];
 
-// ── Seed function ───────────────────────────────────────────────────────────────
+function countWords(html: string): number {
+  const text = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  return text.split(" ").length;
+}
 
-function countWords(text: string): number {
-  return text
-    .replace(/[#*|_\-\[\]()>]/g, "")
-    .split(/\s+/)
-    .filter((w) => w.length > 0).length;
+function estimateReadingTime(wordCount: number): number {
+  return Math.ceil(wordCount / 200);
+}
+
+function extractTableOfContents(
+  html: string
+): Array<{ id: string; text: string; level: number }> {
+  const toc: Array<{ id: string; text: string; level: number }> = [];
+  const regex = /<h([23])>(.*?)<\/h[23]>/g;
+  let match;
+  while ((match = regex.exec(html)) !== null) {
+    const level = parseInt(match[1]);
+    const text = match[2].replace(/<[^>]+>/g, "");
+    const id = text
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+    toc.push({ id, text, level });
+  }
+  return toc;
 }
 
 async function seedArticles() {
   console.log("📝 Seeding blog articles...\n");
 
-  // Clear existing articles
-  console.log("🗑️  Clearing existing articles...");
-  await db.delete(schema.articles);
-  console.log("   ✓ Existing articles cleared\n");
-
-  // Insert articles
-  for (const article of ARTICLES) {
+  const articleValues = ARTICLES.map((article) => {
     const wordCount = countWords(article.content);
-    const readingTime = Math.ceil(wordCount / 200);
+    const readingTime = estimateReadingTime(wordCount);
+    const tableOfContents = extractTableOfContents(article.content);
 
-    console.log(`📄 Inserting: "${article.title}"`);
-    console.log(`   Words: ${wordCount} | Reading time: ${readingTime} min`);
-
-    await db.insert(schema.articles).values({
+    return {
       title: article.title,
       slug: article.slug,
       content: article.content,
@@ -891,14 +708,28 @@ async function seedArticles() {
       targetKeywords: article.targetKeywords,
       wordCount,
       readingTime,
-      status: "published",
-      publishedAt: new Date("2026-03-10T00:00:00Z"),
-    });
+      tableOfContents,
+      faq: null,
+      treatmentId: null,
+      cityId: null,
+      featuredImageUrl: null,
+      status: "published" as const,
+      publishedAt: new Date(article.publishedAt),
+    };
+  });
 
-    console.log(`   ✓ Inserted\n`);
+  for (const article of articleValues) {
+    await db
+      .insert(schema.articles)
+      .values(article)
+      .onConflictDoNothing();
+
+    console.log(
+      `   ✓ "${article.title}" (${article.wordCount} words, ${article.readingTime} min read)`
+    );
   }
 
-  console.log(`✅ All ${ARTICLES.length} articles seeded successfully!`);
+  console.log(`\n✅ ${articleValues.length} articles seeded!`);
   process.exit(0);
 }
 

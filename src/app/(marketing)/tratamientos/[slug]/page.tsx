@@ -20,6 +20,7 @@ import { generateTreatmentMetadata } from "@/lib/seo/metadata";
 import { formatPrice } from "@/lib/utils/format";
 import { TREATMENT_CATEGORY_LABELS, type TreatmentCategory } from "@/types";
 import { TREATMENT_CONTENT } from "@/lib/data/treatment-content";
+import { AllInclusiveCallout } from "@/components/AllInclusiveCallout";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -258,6 +259,17 @@ export default async function TreatmentPage({ params }: Props) {
                 </ul>
               </div>
             </div>
+
+            {/* All-inclusive advice */}
+            {content.allInclusiveTip && (
+              <div className="mt-6">
+                <AllInclusiveCallout
+                  treatmentName={treatment.name}
+                  shouldInclude={content.allInclusiveTip.shouldInclude}
+                  potentialSavings={content.allInclusiveTip.potentialSavings}
+                />
+              </div>
+            )}
 
             {/* Duration and recovery */}
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
