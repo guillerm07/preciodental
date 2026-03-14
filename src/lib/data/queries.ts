@@ -118,7 +118,7 @@ export async function getPricesByCity(cityId: number) {
     .from(prices)
     .innerJoin(treatments, eq(prices.treatmentId, treatments.id))
     .where(eq(prices.cityId, cityId))
-    .groupBy(prices.treatmentId, treatments.name, treatments.slug)
+    .groupBy(prices.treatmentId, treatments.name, treatments.slug, treatments.displayOrder)
     .orderBy(asc(treatments.displayOrder));
 }
 
